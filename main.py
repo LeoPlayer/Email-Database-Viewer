@@ -1,14 +1,10 @@
 import tkinter as tk
 from tkinter import ttk
-from list_scrollable import ListScrollable
+from UIFactories.pane_factory import set_menu, set_toolbar, create_left_pane, create_right_pane
 
 
 INIT_WIN_WIDTH = 1000
 INIT_WIN_HEIGHT = 800
-
-
-def menu_temp_func():
-    print("button pressed")
 
     
 class Application(ttk.Frame):
@@ -32,46 +28,25 @@ class Application(ttk.Frame):
         # noinspection PyUnresolvedReferences
         self.master.geometry(f"{INIT_WIN_WIDTH}x{INIT_WIN_HEIGHT}+{pos_x}+{pos_y}")
 
-        # TOOLBAR
-        self.frame_toolbar = ttk.Frame(self.master)
-        import_button = ttk.Button(master=self.frame_toolbar, text="Import", command=self.temp_import_func)
-        import_button.pack(side=tk.LEFT, padx=(5, 0))
-        self.frame_toolbar.pack(fill=tk.X)
+        set_toolbar(self.master)
 
         # PANES
         self.pw = ttk.PanedWindow(orient=tk.HORIZONTAL)
         self.pw.pack(fill=tk.BOTH, expand=1)
-        left = ttk.Frame(self.pw)
+        left = create_left_pane(self)
         self.pw.add(left)
-        right = ttk.Frame(self.pw)
+        right = create_right_pane(self)
         self.pw.add(right)
-
-        # LEFT LIST
-        ListScrollable(left, "left data")
-
-        ListScrollable(right, "right data")
 
         # SET SASH POSITION
         self.update()
         self.pw.sashpos(0, 170)
-
-    def temp_import_func(self):
-        print(self.pw.sashpos(0))
 
 
 if __name__ == "__main__":
     root = tk.Tk()
     app = Application(root)
 
-    # MENU (comment to see Tkinter Demo)
-    menu_bar = tk.Menu(root)
-    file_menu = tk.Menu(menu_bar, tearoff=0)
-    file_menu.add_command(label="New", command=menu_temp_func)
-    file_menu.add_command(label="Open", command=menu_temp_func)
-    file_menu.add_command(label="Save", command=menu_temp_func)
-    file_menu.add_separator()
-    file_menu.add_command(label="Quit", command=root.quit)
-    menu_bar.add_cascade(label="File", menu=file_menu)
-    root.config(menu=menu_bar)
+    set_menu(root)
 
     app.mainloop()
