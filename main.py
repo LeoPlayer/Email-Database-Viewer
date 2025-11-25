@@ -10,7 +10,7 @@ INIT_WIN_HEIGHT = 800
 def menu_temp_func():
     print("button pressed")
 
-
+    
 class Application(ttk.Frame):
     def __init__(self, master):
         super().__init__(master)
