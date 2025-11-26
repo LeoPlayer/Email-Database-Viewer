@@ -1,0 +1,11 @@
+{
+  "TPanedwindow": {
+    "background": "gray50"
+  },
+  "Sash": {
+    "sashthickness": 5
+  },
+  "TTreeview": {
+    "background": "red"
+  }
+}
