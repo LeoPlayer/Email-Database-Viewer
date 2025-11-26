@@ -1,21 +1,30 @@
+import json
 import tkinter as tk
 from tkinter import ttk
 from UIFactories.pane_factory import set_menu, set_toolbar, create_left_pane, create_right_pane
 
-
 INIT_WIN_WIDTH = 1000
 INIT_WIN_HEIGHT = 800
 
-    
+
 class Application(ttk.Frame):
     def __init__(self, master):
         super().__init__(master)
 
-        # style = custom_style.CreateStyle()
+        # STYLE
         self.style = ttk.Style(self)
-        self.style.configure('TPanedwindow', background="gray50")
-        self.style.configure('Sash', sashthickness=5)
-        self.style.configure("TFrame", background="red")
+        try:
+            with open("style.json") as json_file:
+                json_data = json.load(json_file)
+                for t in json_data:
+                    parameters = {}
+                    for p in json_data[t]:
+                        parameters.update({p: json_data[t][p]})
+                    if len(parameters) != 0:
+                        self.style.configure(t, **parameters)
+                print(json_data)
+        except Exception as e:
+            print(e)
 
         # WINDOW SIZE AND POSITION
         # noinspection PyUnresolvedReferences
