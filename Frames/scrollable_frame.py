@@ -34,7 +34,3 @@ class ScrollableFrame(tk.Frame):
     def update(self):
         self.update_idletasks()
         self.canvas.config(scrollregion=self.canvas.bbox(self.windows_item))
-
-    # turns scrolling on for this frame
-    def scrolling_on(self, event):
-        self.canvas.yview_scroll(-1 if event.delta > 0 else 1, "units")
