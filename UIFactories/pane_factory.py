@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 from UIFactories.list_factory import create_left_list, create_right_list
+from Frames.scrollable_frame import ScrollableFrame
 
 
 def menu_temp_func():
@@ -23,9 +24,9 @@ def set_menu(root):
     root.config(menu=menu_bar)
 
 
-def set_toolbar(root):
+def set_toolbar(root, app):
     frame_toolbar = ttk.Frame(root)
-    import_button = ttk.Button(master=frame_toolbar, text="Import", command=temp_import_func)
+    import_button = ttk.Button(master=frame_toolbar, text="Import", command=lambda: app.get_sash_pos(0))
     import_button.pack(side=tk.LEFT, padx=(5, 0))
     frame_toolbar.pack(fill=tk.X)
 
@@ -37,6 +38,14 @@ def create_left_pane(app):
 
 
 def create_right_pane(app):
-    pane = ttk.Frame(app.pw)
+    # To add
+    # e.g. search button
+
+    body = ttk.Frame(app.pw)
+    body.pack(fill=tk.BOTH, expand=True)
+    pane = ScrollableFrame(body)
     create_right_list(pane)
-    return pane
+
+    pane.update()
+
+    return body

@@ -1,7 +1,7 @@
 import json
 import tkinter as tk
 from tkinter import ttk
-from UIFactories.pane_factory import set_menu, set_toolbar, create_left_pane, create_right_pane
+from UIFactories import pane_factory
 
 INIT_WIN_WIDTH = 1000
 INIT_WIN_HEIGHT = 800
@@ -22,7 +22,6 @@ class Application(ttk.Frame):
                         parameters.update({p: json_data[t][p]})
                     if len(parameters) != 0:
                         self.style.configure(t, **parameters)
-                print(json_data)
         except Exception as e:
             print(e)
 
@@ -37,25 +36,29 @@ class Application(ttk.Frame):
         # noinspection PyUnresolvedReferences
         self.master.geometry(f"{INIT_WIN_WIDTH}x{INIT_WIN_HEIGHT}+{pos_x}+{pos_y}")
 
-        set_toolbar(self.master)
+        # TOOLBAR
+        pane_factory.set_toolbar(self.master, self)
 
         # PANES
         self.pw = ttk.PanedWindow(orient=tk.HORIZONTAL)
         self.pw.pack(fill=tk.BOTH, expand=1)
-        left = create_left_pane(self)
+        left = pane_factory.create_left_pane(self)
         self.pw.add(left)
-        right = create_right_pane(self)
+        right = pane_factory.create_right_pane(self)
         self.pw.add(right)
 
         # SET SASH POSITION
         self.update()
         self.pw.sashpos(0, 170)
 
+    def get_sash_pos(self, index):
+        print(self.pw.sashpos(index))
+
 
 if __name__ == "__main__":
     root = tk.Tk()
     app = Application(root)
 
-    set_menu(root)
+    pane_factory.set_menu(root)
 
     app.mainloop()
