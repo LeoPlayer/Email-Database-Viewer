@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 from UIFactories.list_factory import create_left_list, create_right_list
-from Frames.scrollable_frame import ScrollableFrame
+from CustomWidgets.scrollable_frame import ScrollableFrame
 
 
 def menu_temp_func():

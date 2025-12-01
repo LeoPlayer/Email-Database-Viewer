@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
-from Menus.right_click_menu import RightClickMenu
+from CustomWidgets.right_click_menu import RightClickMenu
 import lorem
 
 

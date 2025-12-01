@@ -1,0 +1,28 @@
+[
+  {
+    "id": 1,
+    "sender name": "John Doe",
+    "sender email": "john.doe17@gmail.com",
+    "recipient email": "my.email1@outlook.com",
+    "subject": "About that meeting last week with the boss",
+    "time": "2025-12-01 13:33:48.573765+11:00",
+    "email": "Hi My.\n\nAbout that meeting on Tuesday; I realised now that boss was saying we need to check the 10 issues, not tennis shoes. I thought it was his fetish or something, so I didn’t ask for clarification, but it seems there are 10 issues to implement and test before the end of next week. \n\nCould we meet up and talk about that?\n\nCheers,\nJohn"
+  },
+  {
+    "id": 2,
+    "sender email": "mike.lmao25@gmail.com",
+    "recipient email": "my.email1@outlook.com",
+    "subject": "About boss's tennis shoe fetish",
+    "time": "2025-12-01 14:01:13.153765+11:00",
+    "email": "Hey,\nI went to Rebel yesterday to see what kind of tennis shoes there are. I didn’t buy anything in the end, as I think, considering how passionate he was at the meeting, he cares a lot about what kind of shoes they are. Do you have any idea what kind of ones he especially likes?\n\nRegards,\nMike."
+  },
+  {
+    "id": 3,
+    "sender name": "Wise Man Mechanics",
+    "sender email": "wisest.manmechs@hotmail.com",
+    "recipient email": "personal.email6@outlook.com",
+    "subject": "Your car is ready",
+    "time": "2025-12-02 9:17:46.438759+10:00",
+    "email": "Good Morning.\n\nThis is Wise Man Mechanics. Your car has been fully repaired. We had to change the oil out, and replace all tyres (including the spare), so the final price comes to $16,306. We only accept coins, so make sure to be prepared. \n\nP.S. I do hope to hear more about your boss’s tennis shoe fetish, and how that is progressing.\n\nSincerely,\nDale at Wise Man Mechanics"
+  }
+]
