@@ -1,7 +1,10 @@
 import json
+import ctypes
 import tkinter as tk
 from tkinter import ttk
 from UIFactories import pane_factory
+from CustomWidgets.left_frame import LeftFrame
+from CustomWidgets.right_frame import RightFrame
 
 INIT_WIN_WIDTH = 1000
 INIT_WIN_HEIGHT = 800
@@ -41,9 +44,9 @@ class Application(ttk.Frame):
         # PANES
         self.pw = ttk.PanedWindow(orient=tk.HORIZONTAL)
         self.pw.pack(fill=tk.BOTH, expand=1)
-        left = pane_factory.create_left_pane(self)
+        left = LeftFrame(self.pw)
         self.pw.add(left, weight=0)
-        right = pane_factory.create_right_pane(self)
+        right = RightFrame(self.pw)
         # change to 0 when viewer added
         self.pw.add(right, weight=1)
 
@@ -62,10 +65,9 @@ if __name__ == "__main__":
     # Use ctrl+left click as right click on Mac
     if root.tk.call("tk", "windowingsystem") == "aqua":
         root.event_add("<<ContextMenu>>", "<Control-Button-1>")
-    # menu = tk.Menu(root)
-    # for i in ("One", "Two", "Three"):
-    #     menu.add_command(label=i)
-    # root.bind("<<ContextMenu>>", lambda e: menu.post(e.x_root, e.y_root))
+    # Change dpi for windows
+    elif root.tk.call("tk", "windowingsystem") == "win32":
+        ctypes.windll.shcore.SetProcessDpiAwareness(True)
 
     app = Application(root)
 
