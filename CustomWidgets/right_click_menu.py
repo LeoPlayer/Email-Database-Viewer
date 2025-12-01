@@ -5,8 +5,8 @@ class RightClickMenu(tk.Menu):
     def __init__(self, parent_frame, *args, **kwargs):
         tk.Menu.__init__(self, parent_frame, *args, **kwargs)
 
-        parent_frame.bind("<Enter>", lambda e: self.__bind_context_menu(parent_frame))
-        parent_frame.bind("<Leave>", lambda e: self.__unbind_context_menu(parent_frame))
+        parent_frame.bind("<Enter>", lambda e: self.__bind_context_menu(parent_frame), add="+")
+        parent_frame.bind("<Leave>", lambda e: self.__unbind_context_menu(parent_frame), add="+")
 
     def __bind_context_menu(self, parent_frame):
         parent_frame.bind_all("<<ContextMenu>>", lambda e: self.post(e.x_root, e.y_root))

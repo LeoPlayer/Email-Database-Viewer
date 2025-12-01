@@ -16,8 +16,8 @@ class ScrollableFrame(tk.Frame):
 
         # base class initialization
         tk.Frame.__init__(self, frame)
-        self.bind("<Enter>", self.__bind_scrolling)
-        self.bind("<Leave>", self.__unbind_scrolling)
+        self.bind("<Enter>", self.__bind_scrolling, add="+")
+        self.bind("<Leave>", self.__unbind_scrolling, add="+")
 
         # assign this obj (the inner frame) to the windows item of the canvas
         self.windows_item = self.canvas.create_window(0, 0, window=self, anchor=tk.NW)
