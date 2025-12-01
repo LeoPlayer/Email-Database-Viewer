@@ -28,7 +28,6 @@ class Application(ttk.Frame):
         # WINDOW SIZE AND POSITION
         # noinspection PyUnresolvedReferences
         self.master.title("Email Database Viewer")
-        self.master["bg"] = "white"
         screen_width = self.master.winfo_screenwidth()
         screen_height = self.master.winfo_screenheight()
         pos_x = (screen_width - INIT_WIN_WIDTH) // 2
@@ -43,9 +42,10 @@ class Application(ttk.Frame):
         self.pw = ttk.PanedWindow(orient=tk.HORIZONTAL)
         self.pw.pack(fill=tk.BOTH, expand=1)
         left = pane_factory.create_left_pane(self)
-        self.pw.add(left)
+        self.pw.add(left, weight=0)
         right = pane_factory.create_right_pane(self)
-        self.pw.add(right)
+        # change to 0 when viewer added
+        self.pw.add(right, weight=1)
 
         # SET SASH POSITION
         self.update()
@@ -57,6 +57,16 @@ class Application(ttk.Frame):
 
 if __name__ == "__main__":
     root = tk.Tk()
+    root.option_add('*tearOff', tk.FALSE)
+
+    # Use ctrl+left click as right click on Mac
+    if root.tk.call("tk", "windowingsystem") == "aqua":
+        root.event_add("<<ContextMenu>>", "<Control-Button-1>")
+    # menu = tk.Menu(root)
+    # for i in ("One", "Two", "Three"):
+    #     menu.add_command(label=i)
+    # root.bind("<<ContextMenu>>", lambda e: menu.post(e.x_root, e.y_root))
+
     app = Application(root)
 
     pane_factory.set_menu(root)

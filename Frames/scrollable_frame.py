@@ -1,9 +1,10 @@
 import tkinter as tk
+from tkinter import ttk
 
 
 class ScrollableFrame(tk.Frame):
     def __init__(self, frame):
-        scrollbar = tk.Scrollbar(frame)
+        scrollbar = ttk.Scrollbar(frame)
         scrollbar.pack(side=tk.RIGHT, fill=tk.Y, expand=False)
 
         self.canvas = tk.Canvas(frame, yscrollcommand=scrollbar.set, yscrollincrement=3)
@@ -14,7 +15,7 @@ class ScrollableFrame(tk.Frame):
         self.canvas.bind('<Configure>', self.__fill_canvas)
 
         # base class initialization
-        tk.Frame.__init__(self, frame, highlightcolor="orange", bg="green")
+        tk.Frame.__init__(self, frame)
         self.bind("<Enter>", self.__bind_scrolling)
         self.bind("<Leave>", self.__unbind_scrolling)
 
