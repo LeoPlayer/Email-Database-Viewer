@@ -5,6 +5,7 @@ from tkinter import ttk
 from UIFactories import pane_factory
 from CustomWidgets.left_frame import LeftFrame
 from CustomWidgets.right_frame import RightFrame
+from helpers import *
 
 INIT_WIN_WIDTH = 1000
 INIT_WIN_HEIGHT = 800
@@ -45,6 +46,7 @@ class Application(ttk.Frame):
         self.pw = ttk.PanedWindow(orient=tk.HORIZONTAL)
         self.pw.pack(fill=tk.BOTH, expand=1)
         left = LeftFrame(self.pw)
+        # left.pack(fill=tk.BOTH, expand=True)
         self.pw.add(left, weight=0)
         right = RightFrame(self.pw)
         # change to 0 when viewer added
@@ -60,6 +62,7 @@ class Application(ttk.Frame):
 
 if __name__ == "__main__":
     root = tk.Tk()
+    print()
     root.option_add('*tearOff', tk.FALSE)
 
     # Use ctrl+left click as right click on Mac

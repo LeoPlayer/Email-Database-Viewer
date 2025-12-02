@@ -1,18 +1,19 @@
 import tkinter as tk
 from tkinter import ttk
+from CustomWidgets.auto_hide_scrollbar import AutoHideScrollbar
+from helpers import *
 
 
 class ScrollableFrame(tk.Frame):
     def __init__(self, frame):
-        scrollbar = ttk.Scrollbar(frame)
-        scrollbar.pack(side=tk.RIGHT, fill=tk.Y, expand=False)
+        scrollbar = AutoHideScrollbar(frame, self)
 
         self.canvas = tk.Canvas(frame, yscrollcommand=scrollbar.set, yscrollincrement=3)
         self.canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 
         scrollbar.config(command=self.canvas.yview)
 
-        self.canvas.bind('<Configure>', self.__fill_canvas)
+        self.canvas.bind('<Configure>', self.__fill_canvas, add="+")
 
         # base class initialization
         tk.Frame.__init__(self, frame)
@@ -26,7 +27,7 @@ class ScrollableFrame(tk.Frame):
         self.canvas.itemconfig(self.windows_item, width=event.width)
 
     def __bind_scrolling(self, _):
-        self.bind_all("<MouseWheel>", lambda e: self.canvas.yview_scroll(-e.delta, "units"))
+        self.bind_all("<MouseWheel>", lambda e: scroll_function(self.canvas, e))
 
     def __unbind_scrolling(self, _):
         self.unbind_all("<MouseWheel>")

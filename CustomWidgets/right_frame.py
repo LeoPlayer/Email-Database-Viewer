@@ -1,7 +1,7 @@
-import tkinter as tk
 from tkinter import ttk
 from CustomWidgets.right_click_menu import RightClickMenu
 from CustomWidgets.scrollable_frame import ScrollableFrame
+from helpers import *
 import lorem
 
 
@@ -15,7 +15,7 @@ class RightFrame(ttk.Frame):
         right_click_menu.add_command(label="Right Test 1", command=lambda: print("right test 1"))
         right_click_menu.add_command(label="Right Test 2", command=lambda: print("right test 2"))
 
-        for i in range(100):
+        for i in range(10):
             email_frame = tk.Frame(self.sc_frame)
             t = tk.Text(email_frame, height=1, width=80, highlightthickness=0)
             t.insert("1.0", "text 1: " + str(i + 1) + ", " + lorem.text())

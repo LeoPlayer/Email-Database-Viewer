@@ -1,6 +1,7 @@
 {
   "TPanedwindow": {
-    "background": "gray50"
+    "bg": "white",
+    "bd": 0
   },
   "Sash": {
     "sashthickness": 5

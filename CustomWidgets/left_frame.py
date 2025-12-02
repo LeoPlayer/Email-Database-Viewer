@@ -1,17 +1,23 @@
 import tkinter as tk
 from tkinter import ttk
 from CustomWidgets.right_click_menu import RightClickMenu
+from CustomWidgets.auto_hide_scrollbar import AutoHideScrollbar
+from helpers import *
 
 
 class LeftFrame(ttk.Frame):
     def __init__(self, master):
         ttk.Frame.__init__(self, master)
 
-        scrollbar = ttk.Scrollbar(self)
-        self.tree = ttk.Treeview(self, yscrollcommand=scrollbar.set, show="tree")
+        self.tree = ttk.Treeview(self, show="tree")
+        scrollbar_frame = tk.Frame(self, bg="orange")
+        tk.Frame(scrollbar_frame, width=0, height=0).pack()
+        scrollbar = AutoHideScrollbar(scrollbar_frame, self.tree)
+        scrollbar_frame.pack(side=tk.RIGHT, fill=tk.Y)
+        # scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+        self.tree.configure(yscrollcommand=scrollbar.set)
+        self.tree.pack(side=tk.TOP, fill=tk.X)
         scrollbar.configure(command=self.tree.yview)
-        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
-        self.tree.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 
         self.right_click_menu = RightClickMenu(self.tree)
         self.right_click_menu.add_command(label="Left Test 1", command=lambda: print("left test 1"))
