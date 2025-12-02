@@ -10,7 +10,7 @@ class LeftFrame(ttk.Frame):
         ttk.Frame.__init__(self, master)
 
         self.tree = ttk.Treeview(self, show="tree")
-        scrollbar_frame = tk.Frame(self, bg="orange")
+        scrollbar_frame = tk.Frame(self)
         tk.Frame(scrollbar_frame, width=0, height=0).pack()
         scrollbar = AutoHideScrollbar(scrollbar_frame, self.tree)
         scrollbar_frame.pack(side=tk.RIGHT, fill=tk.Y)
