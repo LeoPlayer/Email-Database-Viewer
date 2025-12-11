@@ -10,7 +10,7 @@ import SwiftUI
 struct ContentView: View {
     @State private var searchText: String = ""
     @State private var searchResults: [String] = []
-    @State private var message: String = ""
+    @State private var message: String = "load a JSON file to start"
     
     var body: some View {
         NavigationView {
@@ -90,7 +90,7 @@ struct ContentView: View {
                     }
                 } else {
                     //Spacer()
-                    Text(message.isEmpty ? "load a JSON file to start" : message)
+                    Text(message)
                         .foregroundStyle(.gray)
                 }
                 

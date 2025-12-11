@@ -7,18 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		B36BD6F52EE8602000B19609 /* Email Database Viewer Backend in CopyFiles */ = {isa = PBXBuildFile; fileRef = B36BD6F42EE85FE700B19609 /* Email Database Viewer Backend */; };
+		B3372A572EEAB8A200EB6544 /* Email_Database_Viewer_Backend.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3372A562EEAB8A200EB6544 /* Email_Database_Viewer_Backend.framework */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		B36BD6F32EE85FE700B19609 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = B36BD6ED2EE85FE600B19609 /* Email Database Viewer Backend.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = B36BD6E32EE85FE600B19609;
-			remoteInfo = "Email Database Viewer Backend";
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		B36BD6D22EE85EEE00B19609 /* CopyFiles */ = {
@@ -27,15 +17,14 @@
 			dstPath = "";
 			dstSubfolderSpec = 16;
 			files = (
-				B36BD6F52EE8602000B19609 /* Email Database Viewer Backend in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		B3372A562EEAB8A200EB6544 /* Email_Database_Viewer_Backend.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Email_Database_Viewer_Backend.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B36BD6B12EE8580900B19609 /* Email Database Viewer UI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Email Database Viewer UI.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		B36BD6ED2EE85FE600B19609 /* Email Database Viewer Backend.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "Email Database Viewer Backend.xcodeproj"; path = "../Email Database Viewer Backend/Email Database Viewer Backend.xcodeproj"; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -51,17 +40,26 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B3372A572EEAB8A200EB6544 /* Email_Database_Viewer_Backend.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		B3372A552EEAB8A200EB6544 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				B3372A562EEAB8A200EB6544 /* Email_Database_Viewer_Backend.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		B36BD6A82EE8580900B19609 = {
 			isa = PBXGroup;
 			children = (
-				B36BD6ED2EE85FE600B19609 /* Email Database Viewer Backend.xcodeproj */,
 				B36BD6B32EE8580900B19609 /* Email Database Viewer UI */,
+				B3372A552EEAB8A200EB6544 /* Frameworks */,
 				B36BD6B22EE8580900B19609 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -70,14 +68,6 @@
 			isa = PBXGroup;
 			children = (
 				B36BD6B12EE8580900B19609 /* Email Database Viewer UI.app */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		B36BD6F02EE85FE700B19609 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				B36BD6F42EE85FE700B19609 /* Email Database Viewer Backend */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -135,28 +125,12 @@
 			preferredProjectObjectVersion = 77;
 			productRefGroup = B36BD6B22EE8580900B19609 /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = B36BD6F02EE85FE700B19609 /* Products */;
-					ProjectRef = B36BD6ED2EE85FE600B19609 /* Email Database Viewer Backend.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				B36BD6B02EE8580900B19609 /* Email Database Viewer UI */,
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		B36BD6F42EE85FE700B19609 /* Email Database Viewer Backend */ = {
-			isa = PBXReferenceProxy;
-			fileType = "compiled.mach-o.executable";
-			path = "Email Database Viewer Backend";
-			remoteRef = B36BD6F32EE85FE700B19609 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		B36BD6AF2EE8580900B19609 /* Resources */ = {
