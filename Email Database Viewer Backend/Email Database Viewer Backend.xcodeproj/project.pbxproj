@@ -6,24 +6,16 @@
 	objectVersion = 77;
 	objects = {
 
-/* Begin PBXCopyFilesBuildPhase section */
-		B36BD6C62EE8582800B19609 /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = /usr/share/man/man1/;
-			dstSubfolderSpec = 0;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 1;
-		};
-/* End PBXCopyFilesBuildPhase section */
+/* Begin PBXBuildFile section */
+		B3372A6B2EEC08CC00EB6544 /* GRDB in Frameworks */ = {isa = PBXBuildFile; productRef = B3372A6A2EEC08CC00EB6544 /* GRDB */; };
+/* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		B36BD6C82EE8582800B19609 /* Email Database Viewer Backend */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Email Database Viewer Backend"; sourceTree = BUILT_PRODUCTS_DIR; };
+		B3372A482EEAB7E000EB6544 /* Email_Database_Viewer_Backend.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Email_Database_Viewer_Backend.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		B36BD6CA2EE8582800B19609 /* Email Database Viewer Backend */ = {
+		B3372A4A2EEAB7E000EB6544 /* Email Database Viewer Backend */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = "Email Database Viewer Backend";
 			sourceTree = "<group>";
@@ -31,93 +23,120 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		B36BD6C52EE8582800B19609 /* Frameworks */ = {
+		B3372A452EEAB7E000EB6544 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B3372A6B2EEC08CC00EB6544 /* GRDB in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		B36BD6BF2EE8582800B19609 = {
+		B3372A3E2EEAB7E000EB6544 = {
 			isa = PBXGroup;
 			children = (
-				B36BD6CA2EE8582800B19609 /* Email Database Viewer Backend */,
-				B36BD6C92EE8582800B19609 /* Products */,
+				B3372A4A2EEAB7E000EB6544 /* Email Database Viewer Backend */,
+				B3372A492EEAB7E000EB6544 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		B36BD6C92EE8582800B19609 /* Products */ = {
+		B3372A492EEAB7E000EB6544 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				B36BD6C82EE8582800B19609 /* Email Database Viewer Backend */,
+				B3372A482EEAB7E000EB6544 /* Email_Database_Viewer_Backend.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
+/* Begin PBXHeadersBuildPhase section */
+		B3372A432EEAB7E000EB6544 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
 /* Begin PBXNativeTarget section */
-		B36BD6C72EE8582800B19609 /* Email Database Viewer Backend */ = {
+		B3372A472EEAB7E000EB6544 /* Email Database Viewer Backend */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = B36BD6CF2EE8582800B19609 /* Build configuration list for PBXNativeTarget "Email Database Viewer Backend" */;
+			buildConfigurationList = B3372A4F2EEAB7E000EB6544 /* Build configuration list for PBXNativeTarget "Email Database Viewer Backend" */;
 			buildPhases = (
-				B36BD6C42EE8582800B19609 /* Sources */,
-				B36BD6C52EE8582800B19609 /* Frameworks */,
-				B36BD6C62EE8582800B19609 /* CopyFiles */,
+				B3372A432EEAB7E000EB6544 /* Headers */,
+				B3372A442EEAB7E000EB6544 /* Sources */,
+				B3372A452EEAB7E000EB6544 /* Frameworks */,
+				B3372A462EEAB7E000EB6544 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				B36BD6CA2EE8582800B19609 /* Email Database Viewer Backend */,
+				B3372A4A2EEAB7E000EB6544 /* Email Database Viewer Backend */,
 			);
 			name = "Email Database Viewer Backend";
 			packageProductDependencies = (
+				B3372A6A2EEC08CC00EB6544 /* GRDB */,
 			);
 			productName = "Email Database Viewer Backend";
-			productReference = B36BD6C82EE8582800B19609 /* Email Database Viewer Backend */;
-			productType = "com.apple.product-type.tool";
+			productReference = B3372A482EEAB7E000EB6544 /* Email_Database_Viewer_Backend.framework */;
+			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		B36BD6C02EE8582800B19609 /* Project object */ = {
+		B3372A3F2EEAB7E000EB6544 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 2610;
 				LastUpgradeCheck = 2610;
 				TargetAttributes = {
-					B36BD6C72EE8582800B19609 = {
+					B3372A472EEAB7E000EB6544 = {
 						CreatedOnToolsVersion = 26.1.1;
+						LastSwiftMigration = 2610;
 					};
 				};
 			};
-			buildConfigurationList = B36BD6C32EE8582800B19609 /* Build configuration list for PBXProject "Email Database Viewer Backend" */;
+			buildConfigurationList = B3372A422EEAB7E000EB6544 /* Build configuration list for PBXProject "Email Database Viewer Backend" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 				Base,
 			);
-			mainGroup = B36BD6BF2EE8582800B19609;
+			mainGroup = B3372A3E2EEAB7E000EB6544;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				B3372A692EEC08CC00EB6544 /* XCRemoteSwiftPackageReference "GRDB.swift" */,
+			);
 			preferredProjectObjectVersion = 77;
-			productRefGroup = B36BD6C92EE8582800B19609 /* Products */;
+			productRefGroup = B3372A492EEAB7E000EB6544 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				B36BD6C72EE8582800B19609 /* Email Database Viewer Backend */,
+				B3372A472EEAB7E000EB6544 /* Email Database Viewer Backend */,
 			);
 		};
 /* End PBXProject section */
 
+/* Begin PBXResourcesBuildPhase section */
+		B3372A462EEAB7E000EB6544 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
-		B36BD6C42EE8582800B19609 /* Sources */ = {
+		B3372A442EEAB7E000EB6544 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -127,7 +146,7 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		B36BD6CD2EE8582800B19609 /* Debug */ = {
+		B3372A4D2EEAB7E000EB6544 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -161,6 +180,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -187,10 +207,12 @@
 				SDKROOT = macosx;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
 			};
 			name = Debug;
 		};
-		B36BD6CE2EE8582800B19609 /* Release */ = {
+		B3372A4E2EEAB7E000EB6544 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -224,6 +246,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -242,26 +265,81 @@
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
 			};
 			name = Release;
 		};
-		B36BD6D02EE8582800B19609 /* Debug */ = {
+		B3372A502EEAB7E000EB6544 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				BUILD_LIBRARY_FOR_DISTRIBUTION = NO;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
+				PRODUCT_BUNDLE_IDENTIFIER = "leo.Email-Database-Viewer-Backend";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_INSTALL_MODULE = YES;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
-		B36BD6D12EE8582800B19609 /* Release */ = {
+		B3372A512EEAB7E000EB6544 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				BUILD_LIBRARY_FOR_DISTRIBUTION = NO;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
+				PRODUCT_BUNDLE_IDENTIFIER = "leo.Email-Database-Viewer-Backend";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_INSTALL_MODULE = YES;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 			};
@@ -270,25 +348,44 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		B36BD6C32EE8582800B19609 /* Build configuration list for PBXProject "Email Database Viewer Backend" */ = {
+		B3372A422EEAB7E000EB6544 /* Build configuration list for PBXProject "Email Database Viewer Backend" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				B36BD6CD2EE8582800B19609 /* Debug */,
-				B36BD6CE2EE8582800B19609 /* Release */,
+				B3372A4D2EEAB7E000EB6544 /* Debug */,
+				B3372A4E2EEAB7E000EB6544 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		B36BD6CF2EE8582800B19609 /* Build configuration list for PBXNativeTarget "Email Database Viewer Backend" */ = {
+		B3372A4F2EEAB7E000EB6544 /* Build configuration list for PBXNativeTarget "Email Database Viewer Backend" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				B36BD6D02EE8582800B19609 /* Debug */,
-				B36BD6D12EE8582800B19609 /* Release */,
+				B3372A502EEAB7E000EB6544 /* Debug */,
+				B3372A512EEAB7E000EB6544 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		B3372A692EEC08CC00EB6544 /* XCRemoteSwiftPackageReference "GRDB.swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/groue/GRDB.swift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 7.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		B3372A6A2EEC08CC00EB6544 /* GRDB */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B3372A692EEC08CC00EB6544 /* XCRemoteSwiftPackageReference "GRDB.swift" */;
+			productName = GRDB;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
-	rootObject = B36BD6C02EE8582800B19609 /* Project object */;
+	rootObject = B3372A3F2EEAB7E000EB6544 /* Project object */;
 }
