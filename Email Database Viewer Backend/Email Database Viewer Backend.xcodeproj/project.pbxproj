@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		B3372A542EEAB7FF00EB6544 /* PostgresClientKit in Frameworks */ = {isa = PBXBuildFile; productRef = B3372A532EEAB7FF00EB6544 /* PostgresClientKit */; };
+		B3372A6B2EEC08CC00EB6544 /* GRDB in Frameworks */ = {isa = PBXBuildFile; productRef = B3372A6A2EEC08CC00EB6544 /* GRDB */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,7 +27,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B3372A542EEAB7FF00EB6544 /* PostgresClientKit in Frameworks */,
+				B3372A6B2EEC08CC00EB6544 /* GRDB in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -81,7 +81,7 @@
 			);
 			name = "Email Database Viewer Backend";
 			packageProductDependencies = (
-				B3372A532EEAB7FF00EB6544 /* PostgresClientKit */,
+				B3372A6A2EEC08CC00EB6544 /* GRDB */,
 			);
 			productName = "Email Database Viewer Backend";
 			productReference = B3372A482EEAB7E000EB6544 /* Email_Database_Viewer_Backend.framework */;
@@ -113,7 +113,7 @@
 			mainGroup = B3372A3E2EEAB7E000EB6544;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				B3372A522EEAB7FF00EB6544 /* XCRemoteSwiftPackageReference "PostgresClientKit" */,
+				B3372A692EEC08CC00EB6544 /* XCRemoteSwiftPackageReference "GRDB.swift" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = B3372A492EEAB7E000EB6544 /* Products */;
@@ -273,12 +273,12 @@
 		B3372A502EEAB7E000EB6544 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				BUILD_LIBRARY_FOR_DISTRIBUTION = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
+				DEFINES_MODULE = NO;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -311,12 +311,12 @@
 		B3372A512EEAB7E000EB6544 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				BUILD_LIBRARY_FOR_DISTRIBUTION = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
+				DEFINES_MODULE = NO;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -369,21 +369,21 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		B3372A522EEAB7FF00EB6544 /* XCRemoteSwiftPackageReference "PostgresClientKit" */ = {
+		B3372A692EEC08CC00EB6544 /* XCRemoteSwiftPackageReference "GRDB.swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/codewinsdotcom/PostgresClientKit";
+			repositoryURL = "https://github.com/groue/GRDB.swift.git";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.0;
+				minimumVersion = 7.0.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		B3372A532EEAB7FF00EB6544 /* PostgresClientKit */ = {
+		B3372A6A2EEC08CC00EB6544 /* GRDB */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = B3372A522EEAB7FF00EB6544 /* XCRemoteSwiftPackageReference "PostgresClientKit" */;
-			productName = PostgresClientKit;
+			package = B3372A692EEC08CC00EB6544 /* XCRemoteSwiftPackageReference "GRDB.swift" */;
+			productName = GRDB;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
