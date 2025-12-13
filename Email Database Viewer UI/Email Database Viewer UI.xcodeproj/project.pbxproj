@@ -7,7 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		B3372A572EEAB8A200EB6544 /* Email_Database_Viewer_Backend.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3372A562EEAB8A200EB6544 /* Email_Database_Viewer_Backend.framework */; };
+		B3FD172F2EED06D4005529A6 /* Email_Database_Viewer_Backend.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3372A562EEAB8A200EB6544 /* Email_Database_Viewer_Backend.framework */; };
+		B3FD17302EED06D4005529A6 /* Email_Database_Viewer_Backend.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B3372A562EEAB8A200EB6544 /* Email_Database_Viewer_Backend.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -20,11 +21,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		B3FD17312EED06D4005529A6 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				B3FD17302EED06D4005529A6 /* Email_Database_Viewer_Backend.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		B3372A562EEAB8A200EB6544 /* Email_Database_Viewer_Backend.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Email_Database_Viewer_Backend.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		B36BD6B12EE8580900B19609 /* Email Database Viewer UI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Email Database Viewer UI.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		B36BD6B12EE8580900B19609 /* Email Database Viewer Debug.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Email Database Viewer Debug.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -40,7 +52,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B3372A572EEAB8A200EB6544 /* Email_Database_Viewer_Backend.framework in Frameworks */,
+				B3FD172F2EED06D4005529A6 /* Email_Database_Viewer_Backend.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -67,7 +79,7 @@
 		B36BD6B22EE8580900B19609 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				B36BD6B12EE8580900B19609 /* Email Database Viewer UI.app */,
+				B36BD6B12EE8580900B19609 /* Email Database Viewer Debug.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -83,6 +95,7 @@
 				B36BD6AE2EE8580900B19609 /* Frameworks */,
 				B36BD6AF2EE8580900B19609 /* Resources */,
 				B36BD6D22EE85EEE00B19609 /* CopyFiles */,
+				B3FD17312EED06D4005529A6 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -95,7 +108,7 @@
 			packageProductDependencies = (
 			);
 			productName = "Email Database Viewer UI";
-			productReference = B36BD6B12EE8580900B19609 /* Email Database Viewer UI.app */;
+			productReference = B36BD6B12EE8580900B19609 /* Email Database Viewer Debug.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -302,7 +315,7 @@
 				);
 				MARKETING_VERSION = 0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = "leo.Email-Database-Viewer-UI";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "Email Database Viewer Debug";
 				REGISTER_APP_GROUPS = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -344,7 +357,7 @@
 				);
 				MARKETING_VERSION = 0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = "leo.Email-Database-Viewer-UI";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "Email Database Viewer";
 				REGISTER_APP_GROUPS = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;

@@ -33,7 +33,7 @@ public class DatabaseService {
             try await dbQueue.write {db in
                 try db.create(table: DatabaseConstants.databaseTableName, ifNotExists: true) { t in
                     t.primaryKey(Item.Columns.id.name, .text)
-                    t.column(Item.Columns.name.name, .text).notNull()
+                    t.column(Item.Columns.name.name, .text).notNull().unique()
                     t.column(Item.Columns.description.name, .text)
                 }
             }
@@ -77,8 +77,8 @@ public class DatabaseService {
                 
                 let request = Item.all()
                     .filter {
-                        $0.name.collating(.caseInsensitiveCompare).like(searchPattern) ||
-                        $0.description.collating(.caseInsensitiveCompare).like(searchPattern)
+                        $0.name.like(searchPattern) ||
+                        $0.description.like(searchPattern)
                     }
                     .order(Item.Columns.id.asc)
                 
@@ -92,47 +92,6 @@ public class DatabaseService {
             throw DatabaseError.unknownError("Occurred in searchItems(): \(error.localizedDescription)")
         }
     }
-    
-    
-//    
-//    public func searchItems(_ keyword: String) async throws -> [Item] {
-//        let connection = try getConnection()
-//        defer { connection.close() }
-//        
-//        let text = """
-//            SELECT  id, name, description
-//            FROM    items
-//            WHERE   name ILIKE $1
-//            OR      description ILIKE $1;
-//        """
-//        
-//        do {
-//            let statement = try connection.prepareStatement(text: text)
-//            defer { statement.close() }
-//            
-//            let cursor = try statement.execute(parameterValues: ["%\(keyword)%"])
-//            defer { cursor.close() }
-//            
-//            var results: [Item] = []
-//            for row in cursor {
-//                let columns = try row.get().columns
-//                
-//                let idString = try columns[0].string()
-//                guard let id = UUID(uuidString: idString) else {
-//                    throw DatabaseError.dataParsingFailed("Failed to get valid UUID. Retrieved: \(idString)")
-//                }
-//                
-//                let name = try columns[1].string()
-//                let description = try columns[2].string()
-//                
-//                results.append(Item(id: id, name: name, description: description))
-//            }
-//            
-//            return results
-//        } catch {
-//            throw DatabaseError.queryExecutionFailed("Failed to execute search with search term '\(keyword)': \(error)")
-//        }
-//    }
 }
 
 // singleton wrapper
