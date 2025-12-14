@@ -63,16 +63,21 @@ struct ContentView: View {
                                 .font(.headline)
                                 .padding(.vertical, 8)
                                 .padding(.horizontal, 20)
-                                .background(Color.blue)
-                                .foregroundColor(.white)
-                                .cornerRadius(8)
                         }
                         .buttonStyle(.plain)
+                        .background {
+                            RoundedRectangle(cornerRadius: 8, style: .continuous)
+                                .fill(Color.accentColor)
+                        }
+                        .foregroundColor(.white)
                     }
                     
                 }
                 .padding()
-                .background(Color.gray.opacity(0.1))
+                .background {
+                    ContainerRelativeShape()
+                        .fill(.thinMaterial)
+                }
                 .cornerRadius(15)
                 
                 if curStatus == .initial {
@@ -98,10 +103,7 @@ struct ContentView: View {
                             .background(
                                 RoundedRectangle(cornerRadius: 10)
                                     .fill(Color.init(nsColor: .windowBackgroundColor))
-                                    .overlay(
-                                        RoundedRectangle(cornerRadius: 10)
-                                            .stroke(Color.secondary.opacity(0.3), lineWidth: 0.5)
-                                    )
+                                    .stroke(Color.secondary, lineWidth: 0.5)
                             )
                             .listRowSeparator(.hidden)
                             .listRowBackground(Color.clear)
