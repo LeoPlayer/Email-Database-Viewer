@@ -8,7 +8,6 @@
 import Foundation
 
 public enum Status {
-    case initial
     case loading
     case loaded
 }

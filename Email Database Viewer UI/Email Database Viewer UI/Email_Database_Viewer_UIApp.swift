@@ -18,6 +18,7 @@ struct Email_Database_Viewer_UIApp: App {
         .commands {
             // removes new window command
             CommandGroup(replacing: .newItem) { }
+            SidebarCommands()
         }
     }
 }

@@ -14,7 +14,7 @@ public struct DatabaseConstants {
     static let databaseTableName = "temp_table_name"
 }
 
-public struct Item: Codable, Identifiable, FetchableRecord, PersistableRecord, TableRecord {
+public struct Item: Codable, Identifiable, Equatable, FetchableRecord, PersistableRecord, TableRecord {
     public let id: String
     public let name: String
     public let description: String? // optional
@@ -37,6 +37,10 @@ public struct Item: Codable, Identifiable, FetchableRecord, PersistableRecord, T
         self.id = try row.decode(String.self, forColumn: Columns.id)
         self.name = try row.decode(String.self, forColumn: Columns.name)
         self.description = try? row.decode(String.self, forColumn: Columns.description)
+    }
+    
+    public static func == (lhs: Item, rhs: Item) -> Bool {
+        lhs.id == rhs.id
     }
 }
 
