@@ -15,7 +15,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
     
-    // removes tabs, and the two options under View in the menubar
+    // disables tabs, and the two options under View in the menubar
     private func disableWindowTabbing() {
         for window in NSApp.windows {
             window.tabbingMode = .disallowed
