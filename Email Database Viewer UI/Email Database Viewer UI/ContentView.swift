@@ -12,10 +12,17 @@ struct ContentView: View {
     @State private var curStatus: Status = .loaded
     @State private var searchText: String = ""
     @State private var previousSearchText = ""
-    @State private var searchResults: [Item] = []
+    @State private var searchResults: [EmailItem] = []
     @State private var activeError: DatabaseError? = nil
         
     private let backendAPI = BackendAPI()
+    private let userDateFormatter: DateFormatter = {
+        var formatter = DateFormatter()
+        formatter.dateFormat = "yyyy/MM/dd HH:mm:ss"
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.timeZone = TimeZone(identifier: "Oceania/Sydney")
+        return formatter
+    }()
     
     var body: some View {
         NavigationView {
@@ -64,20 +71,9 @@ struct ContentView: View {
                     
                     HStack {
                         Spacer()
-                        Button {
+                        SearchButton {
                             searchDatabase()
-                        } label: {
-                            Label("Search", systemImage: "magnifyingglass")
-                                .font(.headline)
-                                .padding(.vertical, 8)
-                                .padding(.horizontal, 20)
                         }
-                        .buttonStyle(.plain)
-                        .background {
-                            RoundedRectangle(cornerRadius: 8, style: .continuous)
-                                .fill(Color.accentColor)
-                        }
-                        .foregroundColor(.white)
                     }
                     
                 }
@@ -96,29 +92,14 @@ struct ContentView: View {
                 
                 if !searchResults.isEmpty {
                     ScrollViewReader { proxy in
-                        List(searchResults) { result in
-                            VStack() {
-                                Text(result.name)
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                if (result.description != nil) {
-                                    Text(result.name)
-                                        .frame(maxWidth: .infinity, alignment: .leading)
-                                }
+                        GlassEffectContainer {
+                            List(searchResults) { result in
+                                SearchResult(result: result, dateFormatter: userDateFormatter)
                             }
-                            .padding(.horizontal, 10)
-                            .padding(.vertical, 8)
-                            .background(
-                                RoundedRectangle(cornerRadius: 10)
-                                    .fill(Color.init(nsColor: .windowBackgroundColor))
-                                    .stroke(Color.secondary, lineWidth: 0.5)
-                            )
-                            .listRowSeparator(.hidden)
-                            .listRowBackground(Color.clear)
-                            .listRowInsets(EdgeInsets(top: 5, leading: 0, bottom: 5, trailing: 0))
-                        }
-                        .onChange(of: searchResults) {
-                            if searchResults.count > 0 {
-                                proxy.scrollTo(searchResults[0].id, anchor: UnitPoint.top)
+                            .onChange(of: searchResults) {
+                                if searchResults.count > 0 {
+                                    proxy.scrollTo(searchResults[0].id, anchor: UnitPoint.top)
+                                }
                             }
                         }
                     }
