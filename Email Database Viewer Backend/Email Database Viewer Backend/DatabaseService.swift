@@ -32,9 +32,14 @@ public class DatabaseService {
         do {
             try await dbQueue.write {db in
                 try db.create(table: DatabaseConstants.databaseTableName, ifNotExists: true) { t in
-                    t.primaryKey(Item.Columns.id.name, .text)
-                    t.column(Item.Columns.name.name, .text).notNull().unique()
-                    t.column(Item.Columns.description.name, .text)
+                    t.primaryKey(EmailItem.CodingKeys.id.rawValue, .text)
+                    t.column(EmailItem.CodingKeys.sender_name.rawValue, .text)
+                    t.column(EmailItem.CodingKeys.sender_address.rawValue, .text).notNull()
+                    t.column(EmailItem.CodingKeys.receiver_name.rawValue, .text)
+                    t.column(EmailItem.CodingKeys.receiver_address.rawValue, .text).notNull()
+                    t.column(EmailItem.CodingKeys.email_title.rawValue, .text).notNull()
+                    t.column(EmailItem.CodingKeys.email_content.rawValue, .text).notNull()
+                    t.column(EmailItem.CodingKeys.email_date.rawValue, .datetime).notNull()
                 }
             }
             print("Successfully created table")
@@ -44,7 +49,7 @@ public class DatabaseService {
     }
     
     // inserts as many items as possible. Updates if entry existing
-    public func insertItems(_ items: [Item]) async throws {
+    public func insertItems(_ items: [EmailItem]) async throws {
         do {
             let num_failed = try await dbQueue.write { db -> Int in
                 var num_failed = 0
@@ -70,17 +75,21 @@ public class DatabaseService {
         }
     }
     
-    public func searchItems(_ keyword: String) throws -> [Item] {
+    public func searchItems(_ keyword: String) throws -> [EmailItem] {
         do {
             return try dbQueue.read { db in
                 let searchPattern = "%\(keyword.lowercased())%"
                 
-                let request = Item.all()
-                    .filter {
-                        $0.name.like(searchPattern) ||
-                        $0.description.like(searchPattern)
-                    }
-                    .order(Item.Columns.id.asc)
+                let request = EmailItem.all()
+                    .filter(
+                        EmailItem.Columns.senderName.like(searchPattern)        ||
+                        EmailItem.Columns.senderAddress.like(searchPattern)     ||
+                        EmailItem.Columns.receiverName.like(searchPattern)      ||
+                        EmailItem.Columns.receiverAddress.like(searchPattern)   ||
+                        EmailItem.Columns.emailTitle.like(searchPattern)        ||
+                        EmailItem.Columns.emailContent.like(searchPattern)
+                    )
+                    .order(EmailItem.Columns.id.asc)
                 
                 do {
                     return try request.fetchAll(db)
