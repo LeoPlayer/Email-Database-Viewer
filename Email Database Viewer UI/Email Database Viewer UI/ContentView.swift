@@ -11,7 +11,7 @@ import Email_Database_Viewer_Backend
 struct ContentView: View {
     @State private var splitViewVisibility: NavigationSplitViewVisibility = .all // shows sidebar by default
     
-    @State private var sidebarSelection: AnyHashable?
+    @State private var sidebarSelection: AnySidebarItem?
     @State private var sidebarExpandedStates: [String: Bool] = [:]
     @State private var curStatus: Status = .loaded // stores whether there is an ongoing update to the database
     @State private var searchText: String = ""
@@ -75,6 +75,7 @@ struct ContentView: View {
             .padding()
             .navigationTitle("Email Database Viewer")
         } detail: {
+            // TEMP
             Text("No Email Selected")
                 .font(.title)
                 .foregroundStyle(.tertiary)

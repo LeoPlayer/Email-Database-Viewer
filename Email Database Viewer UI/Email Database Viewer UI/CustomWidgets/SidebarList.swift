@@ -39,13 +39,46 @@ enum InboxNames: String, CaseIterable, Identifiable, Hashable {
 // declares required items to be shown
 protocol sidebarItem: Hashable, Identifiable {
     var id: String { get }
-    var title: String { get }
     var systemIcon: String { get }
+    var email: String { get }
     var inboxType: InboxNames { get }
+    var title: String { get } // what is shown in the sidebar
 }
 
+// Hashable methods
 extension sidebarItem {
     static func == (lhs: Self, rhs: Self) -> Bool {
+        lhs.id == rhs.id
+    }
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+}
+
+// Hashable wrapper for List selection
+struct AnySidebarItem: sidebarItem, Hashable, Identifiable {
+    let id: String
+    let title: String
+    let systemIcon: String
+    let email: String
+    let inboxType: InboxNames
+    
+    private let _getSidebarItem: () -> any sidebarItem
+    
+    init<Item: sidebarItem>(_ item: Item) {
+        self.id = item.id
+        self.title = item.title
+        self.systemIcon = item.systemIcon
+        self.email = item.email
+        self.inboxType = item.inboxType
+        self._getSidebarItem = { item }
+    }
+    
+    var base: any sidebarItem {
+        _getSidebarItem()
+    }
+    
+    static func == (lhs: AnySidebarItem, rhs: AnySidebarItem) -> Bool {
         lhs.id == rhs.id
     }
     func hash(into hasher: inout Hasher) {
@@ -56,16 +89,18 @@ extension sidebarItem {
 struct inboxType: sidebarItem {
     let inboxType: InboxNames
     let parent: account
-    var title: String { inboxType.rawValue }
+    var email: String { parent.email }
+    var id: String { email + "/" + inboxType.rawValue }
+    var title: String { inboxType.rawValue.capitalized }
     var systemIcon: String { inboxType.systemIcon }
-    var id: String { parent.title + "." + title }
 }
 
 struct account: sidebarItem {
-    var inboxType: InboxNames { .allEmails }
-    let title: String
+    let email: String
     let systemIcon: String = "person.crop.circle.fill"
-    var id: String {title}
+    var id: String { email }
+    var title: String { email }
+    var inboxType: InboxNames { .allEmails }
 }
 
 struct InboxTypeView: View {
@@ -79,36 +114,33 @@ struct InboxTypeView: View {
         }
         .padding(.vertical, 4)
         .contentShape(Rectangle())
-        .tag(inboxType)
     }
 }
 
 struct AccountView: View {
     let account: account
     @Binding var expanded: Bool
-    @Binding var sidebarSelection: AnyHashable?
+    @Binding var sidebarSelection: AnySidebarItem?
     
     var body: some View {
         Button(action: {
             expanded.toggle()
-            sidebarSelection = account
         }) {
             HStack {
                 Image(systemName: account.systemIcon)
-                    .foregroundStyle(sidebarSelection  == AnyHashable(account) ? Color.accentColor : .secondary)
+                    .foregroundStyle(.secondary)
                 Text(account.title)
             }
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
-        .tag(account)
     }
 }
 
 // temporary data
 private var allSidebarAccounts: [account] {
     return [
-        account(title: "test@gmail.com")
+        account(email: "test@gmail.com")
     ]
 }
 
@@ -124,7 +156,7 @@ private var allSidebarInboxes: [inboxType] {
 }
 
 struct SidebarList: View {
-    @Binding var selection: AnyHashable?
+    @Binding var selection: AnySidebarItem?
     @Binding var expandedStates: [String: Bool]
     
     var body: some View {
@@ -136,18 +168,32 @@ struct SidebarList: View {
                 )) {
                     ForEach(allSidebarInboxes) { inboxItem in
                         InboxTypeView(inboxType: inboxItem)
+                            .tag(AnySidebarItem(inboxItem))
                     }
                 } label: {
                     AccountView(account: account, expanded: Binding(
                         get: { expandedStates[account.id, default: true] },
                         set: { expandedStates[account.id] = $0}
                     ), sidebarSelection: $selection)
+                        .tag(AnySidebarItem(account))
                 }
             }
         }
         .listStyle(.sidebar)
         .frame(minWidth: 155)
-        
-        
+        .onChange(of: selection) { oldValue, newValue in
+            guard let newBase = newValue?.base else {
+                print("sidebarSelection: nil")
+                return
+            }
+            
+            if let oldBase = oldValue?.base {
+                if oldBase.email == newBase.email && oldBase.inboxType.rawValue == newBase.inboxType.rawValue {
+                    return
+                }
+            }
+            
+            print("sidebarSelection: email=\"\(newBase.email)\", inboxType=\"\(newBase.inboxType.rawValue.capitalized)\"")
+        }
     }
 }
