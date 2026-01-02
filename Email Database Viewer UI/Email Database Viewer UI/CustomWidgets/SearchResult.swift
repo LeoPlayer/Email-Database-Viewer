@@ -14,7 +14,7 @@ struct SearchResult: View {
     
     var body: some View {
         ScrollViewReader { proxy in
-            GlassEffectContainer {
+//            GlassEffectContainer {
                 List(results) { result in
                     VStack() {
                         HStack() {
@@ -53,7 +53,6 @@ struct SearchResult: View {
                     .padding(.horizontal, 10)
                     .padding(.vertical, 8)
                     .listRowSeparator(.hidden)
-//                    .listRowBackground(Color.clear)
                     .listRowInsets(EdgeInsets(top: 5, leading: 0, bottom: 5, trailing: 0))
                     .glassEffect(in: .rect(cornerRadius: 10))
                 }
@@ -62,7 +61,7 @@ struct SearchResult: View {
                         proxy.scrollTo(results[0].id, anchor: UnitPoint.top)
                     }
                 }
-            }
+//            }
         }
     }
 }

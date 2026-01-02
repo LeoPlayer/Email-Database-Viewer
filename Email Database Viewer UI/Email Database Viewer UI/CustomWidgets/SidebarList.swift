@@ -123,17 +123,13 @@ struct AccountView: View {
     @Binding var sidebarSelection: AnySidebarItem?
     
     var body: some View {
-        Button(action: {
-            expanded.toggle()
-        }) {
-            HStack {
-                Image(systemName: account.systemIcon)
-                    .foregroundStyle(.secondary)
-                Text(account.title)
-            }
-            .contentShape(Rectangle())
+        HStack {
+            Image(systemName: account.systemIcon)
+                .foregroundStyle(.secondary)
+            Text(account.title)
         }
-        .buttonStyle(.plain)
+        .padding(.vertical, 4)
+        .contentShape(Rectangle())
     }
 }
 

@@ -12,7 +12,8 @@ struct ContentView: View {
     @State private var splitViewVisibility: NavigationSplitViewVisibility = .all // shows sidebar by default
     
     @State private var sidebarSelection: AnySidebarItem?
-    @State private var sidebarExpandedStates: [String: Bool] = [:]
+    @State private var sidebarExpandedStates: [String: Bool] = [:] // per email address
+    
     @State private var curStatus: Status = .loaded // stores whether there is an ongoing update to the database
     @State private var searchText: String = ""
     @State private var previousSearchText = "" // to determine behaviour when searching the database fails
@@ -33,47 +34,25 @@ struct ContentView: View {
             // sidebar
             SidebarList(selection: $sidebarSelection, expandedStates: $sidebarExpandedStates)
         } content: {
-            VStack {
-                VStack(alignment: .leading) {
-                    Text("Search Database")
-                        .font(.title2)
-                        .bold()
+            GlassEffectContainer {
+                VStack {
+                    SearchBar(searchText: $searchText, searchDatabase: searchDatabase)
                     
-                    TextField("Insert Search Term", text: $searchText)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                        .onSubmit {
-                            searchDatabase()
-                        }
-                    
-                    HStack {
-                        Spacer()
-                        SearchButton {
-                            searchDatabase()
-                        }
+                    if curStatus == .loading {
+                        Text("Loading Data...").foregroundStyle(.gray)
+                    } else if searchResults.count == 0 {
+                        Text("No Emails").foregroundStyle(.gray)
                     }
                     
+                    if !searchResults.isEmpty {
+                        SearchResult(results: searchResults, dateFormatter: userDateFormatter)
+                    }
+                    
+                    Spacer()
                 }
                 .padding()
-                .background {
-                    ContainerRelativeShape()
-                        .fill(.thinMaterial)
-                }
-                .cornerRadius(15)
-                
-                if curStatus == .loading {
-                    Text("Loading Data...").foregroundStyle(.gray)
-                } else if searchResults.count == 0 {
-                    Text("Load JSON to start").foregroundStyle(.gray)
-                }
-                
-                if !searchResults.isEmpty {
-                    SearchResult(results: searchResults, dateFormatter: userDateFormatter)
-                }
-                
-                Spacer()
+                .navigationTitle("Email Database Viewer")
             }
-            .padding()
-            .navigationTitle("Email Database Viewer")
         } detail: {
             // TEMP
             Text("No Email Selected")
@@ -124,10 +103,11 @@ struct ContentView: View {
             return
         }
         
-        if searchResults.count == 0 {
-            activeError = DatabaseError(title: "Error", message: "Load Database First")
-            return
-        }
+        // REPLACE WITH CHECK IF THERE EXISTS NON-EMPTY DATABASE
+//        if searchResults.count == 0 {
+//            activeError = DatabaseError(title: "Error", message: "Load Database First")
+//            return
+//        }
         
         curStatus = .loading
         defer {
