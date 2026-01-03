@@ -7,13 +7,20 @@
 
 import SwiftUI
 import Email_Database_Viewer_Backend
+import SharedConstants
 
 struct ContentView: View {
-    @State private var curStatus: Status = .loaded
+    @State private var splitViewVisibility: NavigationSplitViewVisibility = .all // shows sidebar by default
+    
+    @State private var sidebarSelection: AnySidebarItem?
+    @State private var sidebarExpandedStates: [String: Bool] = [:] // per email address
+    
+    @State private var searchBarHeight: CGFloat = 150
+    @State private var curStatus: Status = .loaded // stores whether there is an ongoing update to the database
     @State private var searchText: String = ""
-    @State private var previousSearchText = ""
+    @State private var previousSearchText = "" // to determine behaviour when searching the database fails
     @State private var searchResults: [EmailItem] = []
-    @State private var activeError: DatabaseError? = nil
+    @State private var activeError: DatabaseError? // shows alert when not nil
         
     private let backendAPI = BackendAPI()
     private let userDateFormatter: DateFormatter = {
@@ -25,90 +32,45 @@ struct ContentView: View {
     }()
     
     var body: some View {
-        NavigationView {
-            // sidebar
-            List {
-                Button {
-                    print("temp sidebar button pressed")
-                } label: {
-                    HStack(alignment: .center) {
-                        Image(systemName: "exclamationmark.triangle")
-                            .font(.body)
-                        Text("Temp Button")
-                            .font(.body)
-                    }
-                    .padding(5)
-                }
-                .buttonStyle(.automatic)
-            }
-            .listStyle(.sidebar)
-            .frame(minWidth: 155)
-            .toolbar {
-                ToolbarItem() {
-                    Button {
-                        print("plus button pressed")
-                        Task {
-                            await addDataToDatabase()
-                        }
-                    } label: {
-                        Image(systemName: "plus")
-                    }
-                }
-            }
-            
-            // main view
-            VStack {
-                VStack(alignment: .leading) {
-                    Text("Search Database")
-                        .font(.title2)
-                        .bold()
-                    
-                    TextField("Insert Search Term", text: $searchText)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                        .onSubmit {
-                            searchDatabase()
-                        }
-                    
-                    HStack {
+        NavigationSplitView(columnVisibility: $splitViewVisibility) {
+            SidebarList(
+                selection: $sidebarSelection,
+                expandedStates: $sidebarExpandedStates,
+                searchDatabasePrevTerm: { searchDatabase(usePreviousSearchTerm: true) }
+            )
+        } content: {
+            ZStack(alignment: .top) {
+                VStack {
+                    if curStatus == .loading {
                         Spacer()
-                        SearchButton {
-                            searchDatabase()
-                        }
+                        Text("Loading Data...").foregroundStyle(.gray)
+                            .padding(.top, searchBarHeight + 20)
+                        Spacer()
+                    } else if searchResults.count == 0 {
+                        Spacer()
+                        Text("No Emails").foregroundStyle(.gray)
+                            .padding(.top, searchBarHeight + 20)
+                        Spacer()
+                    } else {
+                        SearchResult(results: searchResults, dateFormatter: userDateFormatter, searchBarHeight: searchBarHeight)
                     }
+                }
+                
+                VStack {
+                    SearchBar(
+                        searchText: $searchText,
+                        searchBarHeight: $searchBarHeight,
+                        searchDatabaseFunc: { searchDatabase(usePreviousSearchTerm: false) }
+                    )
                     
+                    Spacer()
                 }
-                .padding()
-                .background {
-                    ContainerRelativeShape()
-                        .fill(.thinMaterial)
-                }
-                .cornerRadius(15)
-                
-                if curStatus == .loading {
-                    Text("Loading Data...").foregroundStyle(.gray)
-                } else if searchResults.count == 0 {
-                    Text("Load JSON to start").foregroundStyle(.gray)
-                }
-                
-                if !searchResults.isEmpty {
-                    ScrollViewReader { proxy in
-                        GlassEffectContainer {
-                            List(searchResults) { result in
-                                SearchResult(result: result, dateFormatter: userDateFormatter)
-                            }
-                            .onChange(of: searchResults) {
-                                if searchResults.count > 0 {
-                                    proxy.scrollTo(searchResults[0].id, anchor: UnitPoint.top)
-                                }
-                            }
-                        }
-                    }
-                }
-                
-                Spacer()
             }
-            .padding()
-            .navigationTitle("Email Database Viewer")
+        } detail: {
+            // TEMP
+            Text("No Email Selected")
+                .font(.title)
+                .foregroundStyle(.tertiary)
         }
         .alert(item: $activeError) { error in
             Alert(
@@ -116,6 +78,16 @@ struct ContentView: View {
                 message: Text(error.message),
                 dismissButton: .default(Text("OK")) {}
             )
+        }
+        .toolbar {
+            ToolbarItem(placement: .automatic) {
+                Button ("Add Database File", systemImage: "plus") {
+                    print("plus button pressed")
+                    Task {
+                        await addDataToDatabase()
+                    }
+                }
+            }
         }
     }
     
@@ -132,22 +104,26 @@ struct ContentView: View {
         
         do {
             try await backendAPI.populate()
-            searchResults = try backendAPI.searchDatabase(previousSearchText)
+            searchResults = try backendAPI.searchDatabase(
+                searchTerm: previousSearchText,
+                email: sidebarSelection?.email ?? SidebarConstants.allEmailAccounts
+            )
         } catch {
             activeError = DatabaseError(title: "Database Populate Error", message: error.localizedDescription)
         }
     }
     
-    private func searchDatabase() {
+    private func searchDatabase(usePreviousSearchTerm: Bool = false) {
         if curStatus == .loading {
             activeError = DatabaseError(title: "Error", message: "The Database is Still Loading")
             return
         }
         
-        if searchResults.count == 0 {
-            activeError = DatabaseError(title: "Error", message: "Load Database First")
-            return
-        }
+        // REPLACE WITH CHECK IF THERE EXISTS NON-EMPTY DATABASE
+//        if searchResults.count == 0 {
+//            activeError = DatabaseError(title: "Error", message: "Load Database First")
+//            return
+//        }
         
         curStatus = .loading
         defer {
@@ -155,8 +131,18 @@ struct ContentView: View {
         }
         
         do {
-            searchResults = try backendAPI.searchDatabase(searchText)
-            previousSearchText = searchText
+            if usePreviousSearchTerm {
+                searchResults = try backendAPI.searchDatabase(
+                    searchTerm: previousSearchText,
+                    email: sidebarSelection?.email ?? SidebarConstants.allEmailAccounts
+                )
+            } else {
+                searchResults = try backendAPI.searchDatabase(
+                    searchTerm: searchText,
+                    email: sidebarSelection?.email ?? SidebarConstants.allEmailAccounts
+                )
+                previousSearchText = searchText
+            }
         } catch {
             activeError = DatabaseError(title: "Database Search Error", message: error.localizedDescription)
         }

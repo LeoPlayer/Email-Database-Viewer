@@ -1,17 +1,16 @@
 //
-//  Constants.swift
-//  Email Database Viewer Backend
+//  DatabaseConstants.swift
+//  Email Database Viewer UI
 //
-//  Created by プレイヤー怜央 on 2025/12/11.
+//  Created by プレイヤー怜央 on 2026/01/04.
 //
 
 import Foundation
 import GRDB
 
-
 public struct DatabaseConstants {
-    static let databaseFileName = "my_database.sqlite"
-    static let databaseTableName = "temp_table_name"
+    public static let databaseFileName = "my_database.sqlite"
+    public static let databaseTableName = "temp_table_name"
 }
 
 public struct EmailItem: Codable, Identifiable, Equatable, FetchableRecord, PersistableRecord, TableRecord {
@@ -38,14 +37,14 @@ public struct EmailItem: Codable, Identifiable, Equatable, FetchableRecord, Pers
         }
     
     public enum Columns {
-        static let id = Column(CodingKeys.id)
-        static let senderName = Column(CodingKeys.sender_name)
-        static let senderAddress = Column(CodingKeys.sender_address)
-        static let receiverName = Column(CodingKeys.receiver_name)
-        static let receiverAddress = Column(CodingKeys.receiver_address)
-        static let emailTitle = Column(CodingKeys.email_title)
-        static let emailContent = Column(CodingKeys.email_content)
-        static let emailDate = Column(CodingKeys.email_date)
+        public static let id = Column(CodingKeys.id)
+        public static let senderName = Column(CodingKeys.sender_name)
+        public static let senderAddress = Column(CodingKeys.sender_address)
+        public static let receiverName = Column(CodingKeys.receiver_name)
+        public static let receiverAddress = Column(CodingKeys.receiver_address)
+        public static let emailTitle = Column(CodingKeys.email_title)
+        public static let emailContent = Column(CodingKeys.email_content)
+        public static let emailDate = Column(CodingKeys.email_date)
     }
     
     public init(
