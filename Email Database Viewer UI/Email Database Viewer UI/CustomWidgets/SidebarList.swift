@@ -35,8 +35,6 @@ enum InboxNames: String, CaseIterable, Identifiable, Hashable {
     }
 }
 
-// common protocol for sidebar items
-// declares required items to be shown
 protocol sidebarItem: Hashable, Identifiable {
     var id: String { get }
     var systemIcon: String { get }
@@ -86,7 +84,7 @@ struct AnySidebarItem: sidebarItem, Hashable, Identifiable {
     }
 }
 
-struct inboxType: sidebarItem {
+private struct inboxType: sidebarItem {
     let inboxType: InboxNames
     let parent: account
     var email: String { parent.email }
@@ -95,7 +93,7 @@ struct inboxType: sidebarItem {
     var systemIcon: String { inboxType.systemIcon }
 }
 
-struct account: sidebarItem {
+private struct account: sidebarItem {
     let email: String
     let systemIcon: String = "person.crop.circle.fill"
     var id: String { email }
@@ -103,30 +101,30 @@ struct account: sidebarItem {
     var inboxType: InboxNames { .allEmails }
 }
 
-struct InboxTypeView: View {
-    let inboxType: inboxType
+private struct IconAndText: View {
+    let image: Image
+    let sizedText: Text
+    @State private var iconWidth: CGFloat = 0
     
     var body: some View {
         HStack {
-            Image(systemName: inboxType.systemIcon)
+            image
+                .resizable()
+                .scaledToFit()
+                .frame(width: iconWidth, height: iconWidth)
+                .frame(minWidth: iconWidth + 4, alignment: .leading)
                 .foregroundStyle(.secondary)
-            Text(inboxType.title)
-        }
-        .padding(.vertical, 4)
-        .contentShape(Rectangle())
-    }
-}
-
-struct AccountView: View {
-    let account: account
-    @Binding var expanded: Bool
-    @Binding var sidebarSelection: AnySidebarItem?
-    
-    var body: some View {
-        HStack {
-            Image(systemName: account.systemIcon)
-                .foregroundStyle(.secondary)
-            Text(account.title)
+            
+            sizedText
+                .background {
+                    GeometryReader { proxy in
+                        Spacer()
+                            .frame(height: 0)
+                            .onAppear {
+                                iconWidth = proxy.size.height
+                            }
+                    }
+                }
         }
         .padding(.vertical, 4)
         .contentShape(Rectangle())
@@ -163,14 +161,12 @@ struct SidebarList: View {
                     set: { expandedStates[account.id] = $0}
                 )) {
                     ForEach(allSidebarInboxes) { inboxItem in
-                        InboxTypeView(inboxType: inboxItem)
+                        IconAndText(image: Image(systemName: inboxItem.systemIcon), sizedText: Text(inboxItem.title))
                             .tag(AnySidebarItem(inboxItem))
                     }
                 } label: {
-                    AccountView(account: account, expanded: Binding(
-                        get: { expandedStates[account.id, default: true] },
-                        set: { expandedStates[account.id] = $0}
-                    ), sidebarSelection: $selection)
+                    IconAndText(image: Image(systemName: account.systemIcon), sizedText: Text(account.title))
+                        .padding(.leading, 4)
                         .tag(AnySidebarItem(account))
                 }
             }
