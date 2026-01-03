@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SharedConstants
 
 public class BackendAPI {
     private let databaseService = DatabaseService.instance
@@ -40,7 +41,7 @@ public class BackendAPI {
         )
     }
     
-    public func searchDatabase(_ searchTerm: String? = "") throws -> [EmailItem] {
-        return try databaseService.searchItems(searchTerm ?? "")
+    public func searchDatabase(searchTerm: String = "", email: String) throws -> [EmailItem] {
+        return try databaseService.searchItems(keyword: searchTerm, email: email)
     }
 }

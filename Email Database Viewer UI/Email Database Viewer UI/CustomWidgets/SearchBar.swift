@@ -12,7 +12,6 @@ struct SearchBar: View {
     @Binding var searchBarHeight: CGFloat
     var searchDatabaseFunc: () -> Void
     
-    
     var body: some View {
         GlassEffectContainer {
             VStack(alignment: .leading) {
@@ -40,6 +39,9 @@ struct SearchBar: View {
                     Spacer()
                         .frame(height: 0)
                         .onAppear {
+                            searchBarHeight = proxy.size.height
+                        }
+                        .onChange(of: proxy.size.height) {
                             searchBarHeight = proxy.size.height
                         }
                 }

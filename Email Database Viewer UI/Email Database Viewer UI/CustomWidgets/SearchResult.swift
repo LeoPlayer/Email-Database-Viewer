@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Email_Database_Viewer_Backend
+import SharedConstants
 
 struct SearchResult: View {
     let results: [EmailItem]

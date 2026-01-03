@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Email_Database_Viewer_Backend
+import SharedConstants
 
 struct ContentView: View {
     @State private var splitViewVisibility: NavigationSplitViewVisibility = .all // shows sidebar by default
@@ -32,7 +33,11 @@ struct ContentView: View {
     
     var body: some View {
         NavigationSplitView(columnVisibility: $splitViewVisibility) {
-            SidebarList(selection: $sidebarSelection, expandedStates: $sidebarExpandedStates)
+            SidebarList(
+                selection: $sidebarSelection,
+                expandedStates: $sidebarExpandedStates,
+                searchDatabasePrevTerm: { searchDatabase(usePreviousSearchTerm: true) }
+            )
         } content: {
             ZStack(alignment: .top) {
                 VStack {
@@ -52,7 +57,11 @@ struct ContentView: View {
                 }
                 
                 VStack {
-                    SearchBar(searchText: $searchText, searchBarHeight: $searchBarHeight, searchDatabaseFunc: searchDatabase)
+                    SearchBar(
+                        searchText: $searchText,
+                        searchBarHeight: $searchBarHeight,
+                        searchDatabaseFunc: { searchDatabase(usePreviousSearchTerm: false) }
+                    )
                     
                     Spacer()
                 }
@@ -95,13 +104,16 @@ struct ContentView: View {
         
         do {
             try await backendAPI.populate()
-            searchResults = try backendAPI.searchDatabase(previousSearchText)
+            searchResults = try backendAPI.searchDatabase(
+                searchTerm: previousSearchText,
+                email: sidebarSelection?.email ?? SidebarConstants.allEmailAccounts
+            )
         } catch {
             activeError = DatabaseError(title: "Database Populate Error", message: error.localizedDescription)
         }
     }
     
-    private func searchDatabase() {
+    private func searchDatabase(usePreviousSearchTerm: Bool = false) {
         if curStatus == .loading {
             activeError = DatabaseError(title: "Error", message: "The Database is Still Loading")
             return
@@ -119,8 +131,18 @@ struct ContentView: View {
         }
         
         do {
-            searchResults = try backendAPI.searchDatabase(searchText)
-            previousSearchText = searchText
+            if usePreviousSearchTerm {
+                searchResults = try backendAPI.searchDatabase(
+                    searchTerm: previousSearchText,
+                    email: sidebarSelection?.email ?? SidebarConstants.allEmailAccounts
+                )
+            } else {
+                searchResults = try backendAPI.searchDatabase(
+                    searchTerm: searchText,
+                    email: sidebarSelection?.email ?? SidebarConstants.allEmailAccounts
+                )
+                previousSearchText = searchText
+            }
         } catch {
             activeError = DatabaseError(title: "Database Search Error", message: error.localizedDescription)
         }

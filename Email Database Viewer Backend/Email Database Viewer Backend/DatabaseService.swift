@@ -7,6 +7,7 @@
 
 import Foundation
 import GRDB
+import SharedConstants
 
 
 public class DatabaseService {
@@ -75,12 +76,20 @@ public class DatabaseService {
         }
     }
     
-    public func searchItems(_ keyword: String) throws -> [EmailItem] {
+    public func searchItems(keyword: String, email: String) throws -> [EmailItem] {
         do {
             return try dbQueue.read { db in
                 let searchPattern = "%\(keyword.lowercased())%"
                 
-                let request = EmailItem.all()
+                var request = EmailItem.all()
+                
+                if email != SidebarConstants.allEmailAccounts {
+                    request = request.filter(
+                        EmailItem.Columns.receiverAddress == email
+                    )
+                }
+                
+                request = request
                     .filter(
                         EmailItem.Columns.senderName.like(searchPattern)        ||
                         EmailItem.Columns.senderAddress.like(searchPattern)     ||
