@@ -9,11 +9,12 @@ import SwiftUI
 
 struct SearchBar: View {
     @Binding var searchText: String
-    var searchDatabase: () -> Void
+    @Binding var searchBarHeight: CGFloat
+    var searchDatabaseFunc: () -> Void
     
     
     var body: some View {
-//        GlassEffectContainer {
+        GlassEffectContainer {
             VStack(alignment: .leading) {
                 Text("Search Database")
                     .font(.title2)
@@ -21,20 +22,30 @@ struct SearchBar: View {
                 
                 TextField("Insert Search Term", text: $searchText)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
-                    .onSubmit {
-                        searchDatabase()
+                    .onSubmit { // on enter button pressed
+                        searchDatabaseFunc()
                     }
                 
                 HStack {
                     Spacer()
                     SearchButton {
-                        searchDatabase()
+                        searchDatabaseFunc()
                     }
                 }
                 
             }
-            .padding()
+            .padding() // around elements
+            .background {
+                GeometryReader { proxy in
+                    Spacer()
+                        .frame(height: 0)
+                        .onAppear {
+                            searchBarHeight = proxy.size.height
+                        }
+                }
+            }
             .glassEffect(in: .rect(cornerRadius: 15))
-//        }
+            .padding() // around box
+        }
     }
 }

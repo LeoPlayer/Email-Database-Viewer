@@ -14,6 +14,7 @@ struct ContentView: View {
     @State private var sidebarSelection: AnySidebarItem?
     @State private var sidebarExpandedStates: [String: Bool] = [:] // per email address
     
+    @State private var searchBarHeight: CGFloat = 150
     @State private var curStatus: Status = .loaded // stores whether there is an ongoing update to the database
     @State private var searchText: String = ""
     @State private var previousSearchText = "" // to determine behaviour when searching the database fails
@@ -31,27 +32,30 @@ struct ContentView: View {
     
     var body: some View {
         NavigationSplitView(columnVisibility: $splitViewVisibility) {
-            // sidebar
             SidebarList(selection: $sidebarSelection, expandedStates: $sidebarExpandedStates)
         } content: {
-            GlassEffectContainer {
+            ZStack(alignment: .top) {
                 VStack {
-                    SearchBar(searchText: $searchText, searchDatabase: searchDatabase)
-                    
                     if curStatus == .loading {
+                        Spacer()
                         Text("Loading Data...").foregroundStyle(.gray)
+                            .padding(.top, searchBarHeight + 20)
+                        Spacer()
                     } else if searchResults.count == 0 {
+                        Spacer()
                         Text("No Emails").foregroundStyle(.gray)
+                            .padding(.top, searchBarHeight + 20)
+                        Spacer()
+                    } else {
+                        SearchResult(results: searchResults, dateFormatter: userDateFormatter, searchBarHeight: searchBarHeight)
                     }
-                    
-                    if !searchResults.isEmpty {
-                        SearchResult(results: searchResults, dateFormatter: userDateFormatter)
-                    }
+                }
+                
+                VStack {
+                    SearchBar(searchText: $searchText, searchBarHeight: $searchBarHeight, searchDatabaseFunc: searchDatabase)
                     
                     Spacer()
                 }
-                .padding()
-                .navigationTitle("Email Database Viewer")
             }
         } detail: {
             // TEMP

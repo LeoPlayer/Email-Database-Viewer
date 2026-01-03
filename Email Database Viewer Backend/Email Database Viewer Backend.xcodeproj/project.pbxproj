@@ -14,22 +14,9 @@
 		B3372A482EEAB7E000EB6544 /* Email_Database_Viewer_Backend.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Email_Database_Viewer_Backend.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		B30AD1012EEED67A00A5E177 /* Exceptions for "Email Database Viewer Backend" folder in "Email Database Viewer Backend" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				"Email-Database-Viewer-Backend-Info.plist",
-			);
-			target = B3372A472EEAB7E000EB6544 /* Email Database Viewer Backend */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
-
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		B3372A4A2EEAB7E000EB6544 /* Email Database Viewer Backend */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				B30AD1012EEED67A00A5E177 /* Exceptions for "Email Database Viewer Backend" folder in "Email Database Viewer Backend" target */,
-			);
 			path = "Email Database Viewer Backend";
 			sourceTree = "<group>";
 		};
