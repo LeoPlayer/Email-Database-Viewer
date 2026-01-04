@@ -83,10 +83,11 @@ public struct EmailItem: Codable, Identifiable, Equatable, FetchableRecord, Pers
     }
 }
 
-public enum DatabaseError: Error, LocalizedError {
+public enum BackendError: Error, LocalizedError {
     case connectionFailed(String)
     case queryFailed(String)
     case dataParsingFailed(String)
+    case databaseInitialisationFailed(String)
     case unknownError(String)
     
     // localised message
@@ -100,6 +101,8 @@ public enum DatabaseError: Error, LocalizedError {
             return "Failed to parse data: \(string)"
         case .unknownError(let string):
             return "An unknown error occurred: \(string)"
+        case .databaseInitialisationFailed(let string):
+            return "Failed to initialise database: \(string)"
         }
     }
 }

@@ -57,24 +57,27 @@ private struct IconAndText: View {
     }
 }
 
-// temporary data
-private var allAccountArray: [accountItem] {
-    return [
-        accountItem(email: SidebarConstants.allEmailAccounts, systemIcon: "tray.2.fill"),
-        accountItem(email: "leo1@gmail.com", systemIcon: "person.crop.circle.fill"),
-        accountItem(email: "leo2@outlook.com", systemIcon: "person.crop.circle.fill")
-    ]
-}
+//// temporary data
+//private var allAccountArray: [accountItem] {
+//    return [
+//        accountItem(email: SidebarConstants.allEmailAccounts, systemIcon: "tray.2.fill"),
+//        accountItem(email: "leo1@gmail.com", systemIcon: "person.crop.circle.fill"),
+//        accountItem(email: "leo2@outlook.com", systemIcon: "person.crop.circle.fill")
+//    ]
+//}
 
 private var allInboxTypes: [InboxNames] = [
     .allEmails, .inbox, .sent, .flagged, .draft, .deleted
 ]
 
 struct SidebarList: View {
+    @Binding var accounts: [(email: String, systemIcon: String)]
     @Binding var selection: AnySidebarItem?
     @Binding var expandedStates: [String: Bool]
     var searchDatabasePrevTerm: () -> Void
     
+    @State private var allAccountArray: [accountItem] = [accountItem(email: SidebarConstants.allEmailAccounts, systemIcon: "tray.2.fill")]
+        
     var body: some View {
         List(selection: $selection) {
             ForEach(allAccountArray) { account in
@@ -109,9 +112,25 @@ struct SidebarList: View {
                 if oldBase.email == newBase.email && oldBase.inboxType.rawValue == newBase.inboxType.rawValue {
                     return
                 }
+            } else {
+                return // if oldbase == nil
             }
             
             searchDatabasePrevTerm()
+        }
+        .onChange(of: accounts.isEmpty) {
+            if accounts.isEmpty == false {
+                let allEmails = allAccountArray.map { a in a.email }
+                
+                for account in accounts {
+                    if allEmails.contains(account.email) {
+                        continue
+                    }
+                    allAccountArray.append(accountItem(email: account.email, systemIcon: account.systemIcon))
+                }
+                
+                accounts = []
+            }
         }
     }
 }
