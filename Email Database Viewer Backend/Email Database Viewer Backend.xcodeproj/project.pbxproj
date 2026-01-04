@@ -7,11 +7,28 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		B3372A6B2EEC08CC00EB6544 /* GRDB in Frameworks */ = {isa = PBXBuildFile; productRef = B3372A6A2EEC08CC00EB6544 /* GRDB */; };
+		B3BF92282F095061000A7CE6 /* SharedConstants.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3BF92272F095061000A7CE6 /* SharedConstants.framework */; };
+		B3BF92292F095061000A7CE6 /* SharedConstants.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B3BF92272F095061000A7CE6 /* SharedConstants.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		B3E504A72F0AB6B400BD13FB /* GRDB in Frameworks */ = {isa = PBXBuildFile; productRef = B3E504A62F0AB6B400BD13FB /* GRDB */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		B3BF922A2F095061000A7CE6 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				B3BF92292F095061000A7CE6 /* SharedConstants.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		B3372A482EEAB7E000EB6544 /* Email_Database_Viewer_Backend.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Email_Database_Viewer_Backend.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B3BF92272F095061000A7CE6 /* SharedConstants.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = SharedConstants.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -27,7 +44,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B3372A6B2EEC08CC00EB6544 /* GRDB in Frameworks */,
+				B3BF92282F095061000A7CE6 /* SharedConstants.framework in Frameworks */,
+				B3E504A72F0AB6B400BD13FB /* GRDB in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -38,6 +56,7 @@
 			isa = PBXGroup;
 			children = (
 				B3372A4A2EEAB7E000EB6544 /* Email Database Viewer Backend */,
+				B3BF92262F095061000A7CE6 /* Frameworks */,
 				B3372A492EEAB7E000EB6544 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -48,6 +67,14 @@
 				B3372A482EEAB7E000EB6544 /* Email_Database_Viewer_Backend.framework */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		B3BF92262F095061000A7CE6 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				B3BF92272F095061000A7CE6 /* SharedConstants.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -71,6 +98,7 @@
 				B3372A442EEAB7E000EB6544 /* Sources */,
 				B3372A452EEAB7E000EB6544 /* Frameworks */,
 				B3372A462EEAB7E000EB6544 /* Resources */,
+				B3BF922A2F095061000A7CE6 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -81,7 +109,7 @@
 			);
 			name = "Email Database Viewer Backend";
 			packageProductDependencies = (
-				B3372A6A2EEC08CC00EB6544 /* GRDB */,
+				B3E504A62F0AB6B400BD13FB /* GRDB */,
 			);
 			productName = "Email Database Viewer Backend";
 			productReference = B3372A482EEAB7E000EB6544 /* Email_Database_Viewer_Backend.framework */;
@@ -95,7 +123,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 2610;
-				LastUpgradeCheck = 2610;
+				LastUpgradeCheck = 2620;
 				TargetAttributes = {
 					B3372A472EEAB7E000EB6544 = {
 						CreatedOnToolsVersion = 26.1.1;
@@ -113,7 +141,7 @@
 			mainGroup = B3372A3E2EEAB7E000EB6544;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				B3372A692EEC08CC00EB6544 /* XCRemoteSwiftPackageReference "GRDB.swift" */,
+				B3E504A52F0AB6B400BD13FB /* XCRemoteSwiftPackageReference "GRDB.swift" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = B3372A492EEAB7E000EB6544 /* Products */;
@@ -181,6 +209,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -205,6 +234,7 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				VERSIONING_SYSTEM = "apple-generic";
@@ -247,6 +277,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -264,6 +295,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -278,12 +310,14 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEFINES_MODULE = NO;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_MODULE_VERIFIER = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Email-Database-Viewer-Backend-Info.plist";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -316,12 +350,14 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEFINES_MODULE = NO;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_MODULE_VERIFIER = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Email-Database-Viewer-Backend-Info.plist";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -369,7 +405,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		B3372A692EEC08CC00EB6544 /* XCRemoteSwiftPackageReference "GRDB.swift" */ = {
+		B3E504A52F0AB6B400BD13FB /* XCRemoteSwiftPackageReference "GRDB.swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/groue/GRDB.swift.git";
 			requirement = {
@@ -380,9 +416,9 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		B3372A6A2EEC08CC00EB6544 /* GRDB */ = {
+		B3E504A62F0AB6B400BD13FB /* GRDB */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = B3372A692EEC08CC00EB6544 /* XCRemoteSwiftPackageReference "GRDB.swift" */;
+			package = B3E504A52F0AB6B400BD13FB /* XCRemoteSwiftPackageReference "GRDB.swift" */;
 			productName = GRDB;
 		};
 /* End XCSwiftPackageProductDependency section */

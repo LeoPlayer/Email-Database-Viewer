@@ -2,9 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:Email Database Viewer Backend/Email Database Viewer Backend.xcodeproj">
+      location = "group:Email Database Viewer UI/Email Database Viewer UI.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:Email Database Viewer UI/Email Database Viewer UI.xcodeproj">
+      location = "group:Email Database Viewer Backend/Email Database Viewer Backend.xcodeproj">
    </FileRef>
 </Workspace>

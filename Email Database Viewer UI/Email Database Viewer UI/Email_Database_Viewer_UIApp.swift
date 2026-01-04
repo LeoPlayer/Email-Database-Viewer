@@ -9,9 +9,17 @@ import SwiftUI
 
 @main
 struct Email_Database_Viewer_UIApp: App {
+    @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
+        }
+        .commands {
+            // removes new window command
+            CommandGroup(replacing: .newItem) { }
+            // adds commands for sidebar showing/hiding
+            SidebarCommands()
         }
     }
 }

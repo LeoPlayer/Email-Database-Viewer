@@ -7,44 +7,47 @@
 
 import Foundation
 import GRDB
+import SharedConstants
 
 
-public class DatabaseService {
+class DatabaseService {
+    private let dbManager: DatabaseManager
     private let dbQueue: DatabaseQueue
     
-    public init () throws {
-        guard let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
-            throw DatabaseError.unknownError("Could not find document directory (App Support)")
-        }
-        
-        let databasePath = documentsDirectory.appendingPathComponent(DatabaseConstants.databaseFileName)
-        
-        do {
-            self.dbQueue = try DatabaseQueue(path: databasePath.path)
-            print("Connected to SQLite database \(databasePath.path) successfully")
-        } catch {
-            throw DatabaseError.connectionFailed("path name = \(databasePath.path), error message: \(error.localizedDescription)")
-        }
+    init () throws {    
+        self.dbManager = try DatabaseManager()
+        self.dbQueue = dbManager.getDbQueue()
     }
     
-    // creates table, continues if one of the same already exists
-    public func createTable() async throws {
+    func requiresMigration() throws -> Bool {
+        return try dbManager.requiresMigration()
+    }
+    
+    func applyMigration() throws {
+        try dbManager.applyMigration()
+    }
+    
+    func getAllEmails() throws -> [String] {
         do {
-            try await dbQueue.write {db in
-                try db.create(table: DatabaseConstants.databaseTableName, ifNotExists: true) { t in
-                    t.primaryKey(Item.Columns.id.name, .text)
-                    t.column(Item.Columns.name.name, .text).notNull().unique()
-                    t.column(Item.Columns.description.name, .text)
+            return try dbQueue.read { db in
+                let request = EmailItem
+                    .all()
+                    .select(EmailItem.Columns.receiverAddress)
+                    .distinct()
+                
+                do {
+                    return try String.fetchAll(db, request)
+                } catch {
+                    throw BackendError.queryFailed("Failed to get emails: \(error.localizedDescription)")
                 }
             }
-            print("Successfully created table")
         } catch {
-            throw DatabaseError.queryFailed("Failed to create table: \(error.localizedDescription)")
+            throw BackendError.unknownError("Occurred in searchItems(): \(error.localizedDescription)")
         }
     }
     
     // inserts as many items as possible. Updates if entry existing
-    public func insertItems(_ items: [Item]) async throws {
+    func insertItems(_ items: [EmailItem]) async throws {
         do {
             let num_failed = try await dbQueue.write { db -> Int in
                 var num_failed = 0
@@ -60,47 +63,64 @@ public class DatabaseService {
             }
             
             if num_failed > 0 {
-                throw DatabaseError.queryFailed("Could not insert all items. \(items.count - num_failed) succeeded, " +
+                throw BackendError.queryFailed("Could not insert all items. \(items.count - num_failed) succeeded, " +
                                                 "\(num_failed) failed")
             }
             
             print("\(items.count) entries added/updated (includes rows with no changes)")
         } catch {
-            throw DatabaseError.unknownError("Occurred in insertItems(): \(error.localizedDescription)")
+            throw BackendError.unknownError("Occurred in insertItems(): \(error.localizedDescription)")
         }
     }
     
-    public func searchItems(_ keyword: String) throws -> [Item] {
+    func searchItems(keyword: String, email: String) throws -> [EmailItem] {
         do {
             return try dbQueue.read { db in
                 let searchPattern = "%\(keyword.lowercased())%"
                 
-                let request = Item.all()
-                    .filter {
-                        $0.name.like(searchPattern) ||
-                        $0.description.like(searchPattern)
-                    }
-                    .order(Item.Columns.id.asc)
+                var request = EmailItem.all()
+                
+                if email != SidebarConstants.allEmailAccounts {
+                    request = request.filter(
+                        EmailItem.Columns.receiverAddress == email
+                    )
+                }
+                
+                request = request
+                    .filter(
+                        EmailItem.Columns.senderName.like(searchPattern)        ||
+                        EmailItem.Columns.senderAddress.like(searchPattern)     ||
+                        EmailItem.Columns.receiverName.like(searchPattern)      ||
+                        EmailItem.Columns.receiverAddress.like(searchPattern)   ||
+                        EmailItem.Columns.emailTitle.like(searchPattern)        ||
+                        EmailItem.Columns.emailContent.like(searchPattern)
+                    )
+                    .order(EmailItem.Columns.id.asc)
                 
                 do {
                     return try request.fetchAll(db)
                 } catch {
-                    throw DatabaseError.queryFailed("Failed to search with keyword '\(keyword)': \(error.localizedDescription)")
+                    throw BackendError.queryFailed("Failed to search with keyword '\(keyword)': \(error.localizedDescription)")
                 }
             }
         } catch {
-            throw DatabaseError.unknownError("Occurred in searchItems(): \(error.localizedDescription)")
+            throw BackendError.unknownError("Occurred in searchItems(): \(error.localizedDescription)")
         }
     }
 }
 
 // singleton wrapper
-public extension DatabaseService {
-    static let instance: DatabaseService = {
+extension DatabaseService {
+    enum InitialisationResult {
+        case success(DatabaseService)
+        case failure(BackendError)
+    }
+    
+    static let getInitResult: InitialisationResult = {
         do {
-            return try DatabaseService()
+            return .success(try DatabaseService())
         } catch {
-            fatalError("Failed to initialize DatabaseService: \(error.localizedDescription)")
+            return .failure(error as! BackendError)
         }
     }()
 }

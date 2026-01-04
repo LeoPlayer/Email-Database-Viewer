@@ -7,131 +7,153 @@
 
 import SwiftUI
 import Email_Database_Viewer_Backend
+import SharedConstants
 
 struct ContentView: View {
-    @State private var curStatus: Status = .initial
-    @State private var searchText: String = ""
-    @State private var previousSearchText = ""
-    @State private var searchResults: [Item] = []
-    @State private var activeError: DatabaseError? = nil
+    @State private var splitViewVisibility: NavigationSplitViewVisibility = .all // shows sidebar by default
     
-    private let backendAPI = BackendAPI()
+    @State private var sidebarSelection: AnySidebarItem?
+    @State private var sidebarExpandedStates: [String: Bool] = [:] // per email address
+    @State private var accounts: [(email: String, systemIcon: String)] = []
+    
+    @State private var searchBarHeight: CGFloat = 150
+    @State private var curStatus: Status = .loading // stores whether there is an ongoing update to the database
+    @State private var searchText: String = ""
+    @State private var previousSearchText = "" // to determine behaviour when searching the database fails
+    @State private var searchResults: [EmailItem] = []
+    @State private var activeAlert: AlertInfo? // shows alert when not nil
+        
+    @State private var backendAPI: BackendAPI?
+    
+    private let userDateFormatter: DateFormatter = {
+        var formatter = DateFormatter()
+        formatter.dateFormat = "yyyy/MM/dd HH:mm:ss"
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.timeZone = TimeZone(identifier: "Oceania/Sydney")
+        return formatter
+    }()
     
     var body: some View {
-        NavigationView {
-            // sidebar
-            List {
-                Button {
-                    print("temp sidebar button pressed")
-                } label: {
-                    Label("Temp Button", systemImage: "exclamationmark.triangle")
-                }
-                .buttonStyle(.automatic)
-            }
-            .listStyle(.sidebar)
-            .frame(minWidth: 150)
-            .toolbar {
-                ToolbarItem() {
-                    Button {
-                        print("plus button pressed")
-                        addDataToDatabase()
-                    } label: {
-                        Image(systemName: "plus")
+        NavigationSplitView(columnVisibility: $splitViewVisibility) {
+            SidebarList(
+                accounts: $accounts,
+                selection: $sidebarSelection,
+                expandedStates: $sidebarExpandedStates,
+                searchDatabasePrevTerm: { searchDatabase(usePreviousSearchTerm: true) }
+            )
+        } content: {
+            ZStack(alignment: .top) {
+                VStack {
+                    if curStatus == .loading {
+                        Spacer()
+                        Text("Loading Data...").foregroundStyle(.gray)
+                            .padding(.top, searchBarHeight + 20)
+                        Spacer()
+                    } else if searchResults.count == 0 {
+                        Spacer()
+                        Text("No Emails").foregroundStyle(.gray)
+                            .padding(.top, searchBarHeight + 20)
+                        Spacer()
+                    } else {
+                        SearchResult(results: searchResults, dateFormatter: userDateFormatter, searchBarHeight: searchBarHeight)
                     }
                 }
+                
+                VStack {
+                    SearchBar(
+                        searchText: $searchText,
+                        searchBarHeight: $searchBarHeight,
+                        searchDatabaseFunc: { searchDatabase(usePreviousSearchTerm: false) }
+                    )
+                    
+                    Spacer()
+                }
+            }
+        } detail: {
+            // TEMP
+            Text("No Email Selected")
+                .font(.title)
+                .foregroundStyle(.tertiary)
+        }
+        .alert(item: $activeAlert) { errorInfo in
+            AlertFactory.buildAlert(for: errorInfo)
+        }
+        .toolbar {
+            ToolbarItem(placement: .automatic) {
+                Button ("Add Database File", systemImage: "plus") {
+                    print("plus button pressed")
+                    Task {
+                        await addDataToDatabase()
+                    }
+                }
+            }
+        }
+        .onAppear() {
+            Task {
+                await initialiseDatabase()
+            }
+        }
+    }
+    
+    // ONLY ONE OF BELOW FUNCTIONS TO RUN AT ONCE
+    // THIS IS SO ONLY ONE ERROR IS THROWN AT A TIME
+    private func initialiseDatabase() async {
+        curStatus = .loading
+        defer {
+            curStatus = .loaded
+        }
+        
+        do {
+            try backendAPI = BackendAPI()
+        } catch {
+            activeAlert = .fatalError(errorType: "Failed To Initialise Backend API", message: error.localizedDescription)
+            return
+        }
+        
+        var requireMigration: Bool = false
+        
+        do {
+            requireMigration = try backendAPI!.requiresMigration()
+        } catch {
+            activeAlert = .fatalError(errorType: "Require Migration Check Error", message: error.localizedDescription)
+            return
+        }
+        
+        if requireMigration {
+            activeAlert = .requireMigration(details: "")
+            
+            while activeAlert != nil {
+                try? await Task.sleep(nanoseconds: 200_000_000)
             }
             
-            // main view
-            VStack(spacing: 20) {
-                VStack(alignment: .leading) {
-                    Text("Search Database")
-                        .font(.title2)
-                        .bold()
-                    
-                    TextField("Insert Search Term", text: $searchText)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                        .onSubmit {
-                            searchDatabase()
-                        }
-                    
-                    HStack {
-                        Spacer()
-                        Button {
-                            searchDatabase()
-                        } label: {
-                            Label("Search", systemImage: "magnifyingglass")
-                                .font(.headline)
-                                .padding(.vertical, 8)
-                                .padding(.horizontal, 20)
-                                .background(Color.blue)
-                                .foregroundColor(.white)
-                                .cornerRadius(8)
-                        }
-                        .buttonStyle(.plain)
-                    }
-                    
-                }
-                .padding()
-                .background(Color.gray.opacity(0.1))
-                .cornerRadius(15)
-                
-                if curStatus == .initial {
-                    Text("Load JSON to start").foregroundStyle(.gray)
-                }
-                if curStatus == .loading {
-                    Text("Loading Data...").foregroundStyle(.gray)
-                }
-                
-                if !searchResults.isEmpty {
-                    ScrollViewReader { proxy in
-                        List(searchResults) { result in
-                            VStack() {
-                                Text(result.name)
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                if (result.description != nil) {
-                                    Text(result.name)
-                                        .frame(maxWidth: .infinity, alignment: .leading)
-                                }
-                            }
-                            .padding(.horizontal, 10)
-                            .padding(.vertical, 8)
-                            .background(
-                                RoundedRectangle(cornerRadius: 10)
-                                    .fill(Color.init(nsColor: .windowBackgroundColor))
-                                    .overlay(
-                                        RoundedRectangle(cornerRadius: 10)
-                                            .stroke(Color.secondary.opacity(0.3), lineWidth: 0.5)
-                                    )
-                            )
-                            .listRowSeparator(.hidden)
-                            .listRowBackground(Color.clear)
-                            .listRowInsets(EdgeInsets(top: 5, leading: 0, bottom: 5, trailing: 0))
-                        }
-                        .onChange(of: searchResults.count) {
-                            if searchResults.count > 0 {
-                                proxy.scrollTo(searchResults[0].id, anchor: UnitPoint.top)
-                            }
-                        }
-                    }
-                }
-                
-                Spacer()
+            do {
+                try backendAPI!.applyMigration()
+            } catch {
+                activeAlert = .fatalError(errorType: "Failed to Migrate", message: "Failed migration step reverted: " + error.localizedDescription)
+                return
             }
-            .padding()
-            .navigationTitle("Email Database Viewer")
         }
-        .alert(item: $activeError) { error in
-            Alert(
-                title: Text(error.title),
-                message: Text(error.message),
-                dismissButton: .default(Text("OK")) {}
+        
+        do {
+            accounts = try backendAPI!.getAllEmails().map{ e in (email: e, systemIcon: "person.crop.circle.fill") }
+        } catch {
+            activeAlert = .error(title: "Email Load Error", message: error.localizedDescription)
+        }
+        
+        do {
+            searchResults = try backendAPI!.searchDatabase(
+                searchTerm: "",
+                email: sidebarSelection?.email ?? SidebarConstants.allEmailAccounts
             )
+        } catch {
+            activeAlert = .error(title: "Database Load Error", message: error.localizedDescription)
+            return
         }
     }
     
-    private func addDataToDatabase() {
+    private func addDataToDatabase() async {
         if curStatus == .loading {
-            activeError = DatabaseError(title: "Error", message: "The Database is Still Loading")
+            activeAlert = .error(title: "Error", message: "The Database is Still Loading")
             return
         }
         
@@ -140,26 +162,24 @@ struct ContentView: View {
             curStatus = .loaded
         }
         
-        Task {
-            do {
-                try await backendAPI.populate()
-                searchResults = try backendAPI.searchDatabase(previousSearchText)
-            } catch {
-                activeError = DatabaseError(title: "Database Populate Error", message: error.localizedDescription)
-            }
+        do {
+            try await backendAPI!.populate()
+            accounts = try backendAPI!.getAllEmails().map{ e in (email: e, systemIcon: "person.crop.circle.fill") } // TEMP
+            searchResults = try backendAPI!.searchDatabase(
+                searchTerm: previousSearchText,
+                email: sidebarSelection?.email ?? SidebarConstants.allEmailAccounts
+            )
+        } catch {
+            activeAlert = .error(title: "Database Populate Error", message: error.localizedDescription)
+            return
         }
     }
     
-    private func searchDatabase() {
-        switch curStatus {
-        case .initial:
-            activeError = DatabaseError(title: "Error", message: "Load Database First")
+    // usePreviousSearchTerm = true if the result should be a modification of the showing result
+    private func searchDatabase(usePreviousSearchTerm: Bool = false) {
+        if curStatus == .loading {
+            activeAlert = .error(title: "Error", message: "The Database is Still Loading")
             return
-        case .loading:
-            activeError = DatabaseError(title: "Error", message: "The Database is Still Loading")
-            return
-        case .loaded:
-            break
         }
         
         curStatus = .loading
@@ -167,13 +187,22 @@ struct ContentView: View {
             curStatus = .loaded
         }
         
-        Task {
-            do {
-                searchResults = try backendAPI.searchDatabase(searchText)
+        do {
+            if usePreviousSearchTerm {
+                searchResults = try backendAPI!.searchDatabase(
+                    searchTerm: previousSearchText,
+                    email: sidebarSelection?.email ?? SidebarConstants.allEmailAccounts
+                )
+            } else {
+                searchResults = try backendAPI!.searchDatabase(
+                    searchTerm: searchText,
+                    email: sidebarSelection?.email ?? SidebarConstants.allEmailAccounts
+                )
                 previousSearchText = searchText
-            } catch {
-                activeError = DatabaseError(title: "Database Search Error", message: error.localizedDescription)
             }
+        } catch {
+            activeAlert = .error(title: "Database Search Error", message: error.localizedDescription)
+            return
         }
     }
 }
