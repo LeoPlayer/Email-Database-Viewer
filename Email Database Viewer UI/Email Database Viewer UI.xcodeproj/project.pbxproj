@@ -9,7 +9,8 @@
 /* Begin PBXBuildFile section */
 		B3BF92212F09502F000A7CE6 /* SharedConstants.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3BF921B2F09502F000A7CE6 /* SharedConstants.framework */; };
 		B3BF92222F09502F000A7CE6 /* SharedConstants.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B3BF921B2F09502F000A7CE6 /* SharedConstants.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		B3BF92362F095329000A7CE6 /* GRDB in Frameworks */ = {isa = PBXBuildFile; productRef = B3BF92352F095329000A7CE6 /* GRDB */; };
+		B3E504A22F0AB68700BD13FB /* GRDB in Frameworks */ = {isa = PBXBuildFile; productRef = B3E504A12F0AB68700BD13FB /* GRDB */; };
+		B3E504A42F0AB69600BD13FB /* GRDB in Frameworks */ = {isa = PBXBuildFile; productRef = B3E504A32F0AB69600BD13FB /* GRDB */; };
 		B3FD172F2EED06D4005529A6 /* Email_Database_Viewer_Backend.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3372A562EEAB8A200EB6544 /* Email_Database_Viewer_Backend.framework */; };
 		B3FD17302EED06D4005529A6 /* Email_Database_Viewer_Backend.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B3372A562EEAB8A200EB6544 /* Email_Database_Viewer_Backend.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
@@ -72,6 +73,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B3E504A22F0AB68700BD13FB /* GRDB in Frameworks */,
 				B3FD172F2EED06D4005529A6 /* Email_Database_Viewer_Backend.framework in Frameworks */,
 				B3BF92212F09502F000A7CE6 /* SharedConstants.framework in Frameworks */,
 			);
@@ -81,7 +83,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B3BF92362F095329000A7CE6 /* GRDB in Frameworks */,
+				B3E504A42F0AB69600BD13FB /* GRDB in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -148,6 +150,7 @@
 			);
 			name = "Email Database Viewer UI";
 			packageProductDependencies = (
+				B3E504A12F0AB68700BD13FB /* GRDB */,
 			);
 			productName = "Email Database Viewer UI";
 			productReference = B36BD6B12EE8580900B19609 /* Email Database Viewer Debug.app */;
@@ -171,7 +174,7 @@
 			);
 			name = SharedConstants;
 			packageProductDependencies = (
-				B3BF92352F095329000A7CE6 /* GRDB */,
+				B3E504A32F0AB69600BD13FB /* GRDB */,
 			);
 			productName = SharedConstants;
 			productReference = B3BF921B2F09502F000A7CE6 /* SharedConstants.framework */;
@@ -205,7 +208,7 @@
 			mainGroup = B36BD6A82EE8580900B19609;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				B3BF92342F095329000A7CE6 /* XCRemoteSwiftPackageReference "GRDB.swift" */,
+				B3E504A02F0AB68700BD13FB /* XCRemoteSwiftPackageReference "GRDB.swift" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = B36BD6B22EE8580900B19609 /* Products */;
@@ -415,7 +418,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 0.1;
+				MARKETING_VERSION = 0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "leo.Email-Database-Viewer-UI";
 				PRODUCT_NAME = "Email Database Viewer Debug";
 				REGISTER_APP_GROUPS = YES;
@@ -458,7 +461,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 0.1;
+				MARKETING_VERSION = 0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "leo.Email-Database-Viewer-UI";
 				PRODUCT_NAME = "Email Database Viewer";
 				REGISTER_APP_GROUPS = YES;
@@ -596,7 +599,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		B3BF92342F095329000A7CE6 /* XCRemoteSwiftPackageReference "GRDB.swift" */ = {
+		B3E504A02F0AB68700BD13FB /* XCRemoteSwiftPackageReference "GRDB.swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/groue/GRDB.swift.git";
 			requirement = {
@@ -607,9 +610,14 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		B3BF92352F095329000A7CE6 /* GRDB */ = {
+		B3E504A12F0AB68700BD13FB /* GRDB */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = B3BF92342F095329000A7CE6 /* XCRemoteSwiftPackageReference "GRDB.swift" */;
+			package = B3E504A02F0AB68700BD13FB /* XCRemoteSwiftPackageReference "GRDB.swift" */;
+			productName = GRDB;
+		};
+		B3E504A32F0AB69600BD13FB /* GRDB */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B3E504A02F0AB68700BD13FB /* XCRemoteSwiftPackageReference "GRDB.swift" */;
 			productName = GRDB;
 		};
 /* End XCSwiftPackageProductDependency section */

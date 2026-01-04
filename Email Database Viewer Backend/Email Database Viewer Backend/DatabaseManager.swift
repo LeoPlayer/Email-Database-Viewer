@@ -50,7 +50,6 @@ class DatabaseManager {
                 FROM    sqlite_master
                 WHERE   type = 'table' AND name NOT LIKE 'sqlite_%'
             """
-            print(try Int.fetchOne(db, sql: command) ?? "failed")
             return (try Int.fetchOne(db, sql: command) ?? 0) == 0
         }
     }

@@ -7,9 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		B3372A6B2EEC08CC00EB6544 /* GRDB in Frameworks */ = {isa = PBXBuildFile; productRef = B3372A6A2EEC08CC00EB6544 /* GRDB */; };
 		B3BF92282F095061000A7CE6 /* SharedConstants.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3BF92272F095061000A7CE6 /* SharedConstants.framework */; };
 		B3BF92292F095061000A7CE6 /* SharedConstants.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B3BF92272F095061000A7CE6 /* SharedConstants.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		B3E504A72F0AB6B400BD13FB /* GRDB in Frameworks */ = {isa = PBXBuildFile; productRef = B3E504A62F0AB6B400BD13FB /* GRDB */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -44,8 +44,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B3372A6B2EEC08CC00EB6544 /* GRDB in Frameworks */,
 				B3BF92282F095061000A7CE6 /* SharedConstants.framework in Frameworks */,
+				B3E504A72F0AB6B400BD13FB /* GRDB in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -109,7 +109,7 @@
 			);
 			name = "Email Database Viewer Backend";
 			packageProductDependencies = (
-				B3372A6A2EEC08CC00EB6544 /* GRDB */,
+				B3E504A62F0AB6B400BD13FB /* GRDB */,
 			);
 			productName = "Email Database Viewer Backend";
 			productReference = B3372A482EEAB7E000EB6544 /* Email_Database_Viewer_Backend.framework */;
@@ -141,7 +141,7 @@
 			mainGroup = B3372A3E2EEAB7E000EB6544;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				B3372A692EEC08CC00EB6544 /* XCRemoteSwiftPackageReference "GRDB.swift" */,
+				B3E504A52F0AB6B400BD13FB /* XCRemoteSwiftPackageReference "GRDB.swift" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = B3372A492EEAB7E000EB6544 /* Products */;
@@ -405,7 +405,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		B3372A692EEC08CC00EB6544 /* XCRemoteSwiftPackageReference "GRDB.swift" */ = {
+		B3E504A52F0AB6B400BD13FB /* XCRemoteSwiftPackageReference "GRDB.swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/groue/GRDB.swift.git";
 			requirement = {
@@ -416,9 +416,9 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		B3372A6A2EEC08CC00EB6544 /* GRDB */ = {
+		B3E504A62F0AB6B400BD13FB /* GRDB */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = B3372A692EEC08CC00EB6544 /* XCRemoteSwiftPackageReference "GRDB.swift" */;
+			package = B3E504A52F0AB6B400BD13FB /* XCRemoteSwiftPackageReference "GRDB.swift" */;
 			productName = GRDB;
 		};
 /* End XCSwiftPackageProductDependency section */
