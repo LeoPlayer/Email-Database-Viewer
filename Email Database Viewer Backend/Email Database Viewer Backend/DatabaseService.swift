@@ -10,47 +10,44 @@ import GRDB
 import SharedConstants
 
 
-public class DatabaseService {
+class DatabaseService {
+    private let dbManager: DatabaseManager
     private let dbQueue: DatabaseQueue
     
-    public init () throws {
-        guard let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
-            throw DatabaseError.unknownError("Could not find document directory (App Support)")
-        }
-        
-        let databasePath = documentsDirectory.appendingPathComponent(DatabaseConstants.databaseFileName)
-        
-        do {
-            self.dbQueue = try DatabaseQueue(path: databasePath.path)
-            print("Connected to SQLite database \(databasePath.path) successfully")
-        } catch {
-            throw DatabaseError.connectionFailed("path name = \(databasePath.path), error message: \(error.localizedDescription)")
-        }
+    init () throws {    
+        self.dbManager = try DatabaseManager()
+        self.dbQueue = dbManager.getDbQueue()
     }
     
-    // creates table, continues if one of the same already exists
-    public func createTable() async throws {
+    func requiresMigration() throws -> Bool {
+        return try dbManager.requiresMigration()
+    }
+    
+    func applyMigration() throws {
+        try dbManager.applyMigration()
+    }
+    
+    func getAllEmails() throws -> [String] {
         do {
-            try await dbQueue.write {db in
-                try db.create(table: DatabaseConstants.databaseTableName, ifNotExists: true) { t in
-                    t.primaryKey(EmailItem.CodingKeys.id.rawValue, .text)
-                    t.column(EmailItem.CodingKeys.sender_name.rawValue, .text)
-                    t.column(EmailItem.CodingKeys.sender_address.rawValue, .text).notNull()
-                    t.column(EmailItem.CodingKeys.receiver_name.rawValue, .text)
-                    t.column(EmailItem.CodingKeys.receiver_address.rawValue, .text).notNull()
-                    t.column(EmailItem.CodingKeys.email_title.rawValue, .text).notNull()
-                    t.column(EmailItem.CodingKeys.email_content.rawValue, .text).notNull()
-                    t.column(EmailItem.CodingKeys.email_date.rawValue, .datetime).notNull()
+            return try dbQueue.read { db in
+                let request = EmailItem
+                    .all()
+                    .select(EmailItem.Columns.receiverAddress)
+                    .distinct()
+                
+                do {
+                    return try String.fetchAll(db, request)
+                } catch {
+                    throw BackendError.queryFailed("Failed to get emails: \(error.localizedDescription)")
                 }
             }
-            print("Successfully created table")
         } catch {
-            throw DatabaseError.queryFailed("Failed to create table: \(error.localizedDescription)")
+            throw BackendError.unknownError("Occurred in searchItems(): \(error.localizedDescription)")
         }
     }
     
     // inserts as many items as possible. Updates if entry existing
-    public func insertItems(_ items: [EmailItem]) async throws {
+    func insertItems(_ items: [EmailItem]) async throws {
         do {
             let num_failed = try await dbQueue.write { db -> Int in
                 var num_failed = 0
@@ -66,17 +63,17 @@ public class DatabaseService {
             }
             
             if num_failed > 0 {
-                throw DatabaseError.queryFailed("Could not insert all items. \(items.count - num_failed) succeeded, " +
+                throw BackendError.queryFailed("Could not insert all items. \(items.count - num_failed) succeeded, " +
                                                 "\(num_failed) failed")
             }
             
             print("\(items.count) entries added/updated (includes rows with no changes)")
         } catch {
-            throw DatabaseError.unknownError("Occurred in insertItems(): \(error.localizedDescription)")
+            throw BackendError.unknownError("Occurred in insertItems(): \(error.localizedDescription)")
         }
     }
     
-    public func searchItems(keyword: String, email: String) throws -> [EmailItem] {
+    func searchItems(keyword: String, email: String) throws -> [EmailItem] {
         do {
             return try dbQueue.read { db in
                 let searchPattern = "%\(keyword.lowercased())%"
@@ -103,22 +100,27 @@ public class DatabaseService {
                 do {
                     return try request.fetchAll(db)
                 } catch {
-                    throw DatabaseError.queryFailed("Failed to search with keyword '\(keyword)': \(error.localizedDescription)")
+                    throw BackendError.queryFailed("Failed to search with keyword '\(keyword)': \(error.localizedDescription)")
                 }
             }
         } catch {
-            throw DatabaseError.unknownError("Occurred in searchItems(): \(error.localizedDescription)")
+            throw BackendError.unknownError("Occurred in searchItems(): \(error.localizedDescription)")
         }
     }
 }
 
 // singleton wrapper
-public extension DatabaseService {
-    static let instance: DatabaseService = {
+extension DatabaseService {
+    enum InitialisationResult {
+        case success(DatabaseService)
+        case failure(BackendError)
+    }
+    
+    static let getInitResult: InitialisationResult = {
         do {
-            return try DatabaseService()
+            return .success(try DatabaseService())
         } catch {
-            fatalError("Failed to initialize DatabaseService: \(error.localizedDescription)")
+            return .failure(error as! BackendError)
         }
     }()
 }

@@ -14,15 +14,17 @@ struct ContentView: View {
     
     @State private var sidebarSelection: AnySidebarItem?
     @State private var sidebarExpandedStates: [String: Bool] = [:] // per email address
+    @State private var accounts: [(email: String, systemIcon: String)] = []
     
     @State private var searchBarHeight: CGFloat = 150
-    @State private var curStatus: Status = .loaded // stores whether there is an ongoing update to the database
+    @State private var curStatus: Status = .loading // stores whether there is an ongoing update to the database
     @State private var searchText: String = ""
     @State private var previousSearchText = "" // to determine behaviour when searching the database fails
     @State private var searchResults: [EmailItem] = []
-    @State private var activeError: DatabaseError? // shows alert when not nil
+    @State private var activeAlert: AlertInfo? // shows alert when not nil
         
-    private let backendAPI = BackendAPI()
+    @State private var backendAPI: BackendAPI?
+    
     private let userDateFormatter: DateFormatter = {
         var formatter = DateFormatter()
         formatter.dateFormat = "yyyy/MM/dd HH:mm:ss"
@@ -34,6 +36,7 @@ struct ContentView: View {
     var body: some View {
         NavigationSplitView(columnVisibility: $splitViewVisibility) {
             SidebarList(
+                accounts: $accounts,
                 selection: $sidebarSelection,
                 expandedStates: $sidebarExpandedStates,
                 searchDatabasePrevTerm: { searchDatabase(usePreviousSearchTerm: true) }
@@ -72,12 +75,8 @@ struct ContentView: View {
                 .font(.title)
                 .foregroundStyle(.tertiary)
         }
-        .alert(item: $activeError) { error in
-            Alert(
-                title: Text(error.title),
-                message: Text(error.message),
-                dismissButton: .default(Text("OK")) {}
-            )
+        .alert(item: $activeAlert) { errorInfo in
+            AlertFactory.buildAlert(for: errorInfo)
         }
         .toolbar {
             ToolbarItem(placement: .automatic) {
@@ -89,11 +88,72 @@ struct ContentView: View {
                 }
             }
         }
+        .onAppear() {
+            Task {
+                await initialiseDatabase()
+            }
+        }
+    }
+    
+    // ONLY ONE OF BELOW FUNCTIONS TO RUN AT ONCE
+    // THIS IS SO ONLY ONE ERROR IS THROWN AT A TIME
+    private func initialiseDatabase() async {
+        curStatus = .loading
+        defer {
+            curStatus = .loaded
+        }
+        
+        do {
+            try backendAPI = BackendAPI()
+        } catch {
+            activeAlert = .fatalError(errorType: "Failed To Initialise Backend API", message: error.localizedDescription)
+            return
+        }
+        
+        var requireMigration: Bool = false
+        
+        do {
+            requireMigration = try backendAPI!.requiresMigration()
+        } catch {
+            activeAlert = .fatalError(errorType: "Require Migration Check Error", message: error.localizedDescription)
+            return
+        }
+        
+        if requireMigration {
+            activeAlert = .requireMigration(details: "")
+            
+            while activeAlert != nil {
+                try? await Task.sleep(nanoseconds: 200_000_000)
+            }
+            
+            do {
+                try backendAPI!.applyMigration()
+            } catch {
+                activeAlert = .fatalError(errorType: "Failed to Migrate", message: "Failed migration step reverted: " + error.localizedDescription)
+                return
+            }
+        }
+        
+        do {
+            accounts = try backendAPI!.getAllEmails().map{ e in (email: e, systemIcon: "person.crop.circle.fill") }
+        } catch {
+            activeAlert = .error(title: "Email Load Error", message: error.localizedDescription)
+        }
+        
+        do {
+            searchResults = try backendAPI!.searchDatabase(
+                searchTerm: "",
+                email: sidebarSelection?.email ?? SidebarConstants.allEmailAccounts
+            )
+        } catch {
+            activeAlert = .error(title: "Database Load Error", message: error.localizedDescription)
+            return
+        }
     }
     
     private func addDataToDatabase() async {
         if curStatus == .loading {
-            activeError = DatabaseError(title: "Error", message: "The Database is Still Loading")
+            activeAlert = .error(title: "Error", message: "The Database is Still Loading")
             return
         }
         
@@ -103,27 +163,24 @@ struct ContentView: View {
         }
         
         do {
-            try await backendAPI.populate()
-            searchResults = try backendAPI.searchDatabase(
+            try await backendAPI!.populate()
+            accounts = try backendAPI!.getAllEmails().map{ e in (email: e, systemIcon: "person.crop.circle.fill") } // TEMP
+            searchResults = try backendAPI!.searchDatabase(
                 searchTerm: previousSearchText,
                 email: sidebarSelection?.email ?? SidebarConstants.allEmailAccounts
             )
         } catch {
-            activeError = DatabaseError(title: "Database Populate Error", message: error.localizedDescription)
+            activeAlert = .error(title: "Database Populate Error", message: error.localizedDescription)
+            return
         }
     }
     
+    // usePreviousSearchTerm = true if the result should be a modification of the showing result
     private func searchDatabase(usePreviousSearchTerm: Bool = false) {
         if curStatus == .loading {
-            activeError = DatabaseError(title: "Error", message: "The Database is Still Loading")
+            activeAlert = .error(title: "Error", message: "The Database is Still Loading")
             return
         }
-        
-        // REPLACE WITH CHECK IF THERE EXISTS NON-EMPTY DATABASE
-//        if searchResults.count == 0 {
-//            activeError = DatabaseError(title: "Error", message: "Load Database First")
-//            return
-//        }
         
         curStatus = .loading
         defer {
@@ -132,19 +189,20 @@ struct ContentView: View {
         
         do {
             if usePreviousSearchTerm {
-                searchResults = try backendAPI.searchDatabase(
+                searchResults = try backendAPI!.searchDatabase(
                     searchTerm: previousSearchText,
                     email: sidebarSelection?.email ?? SidebarConstants.allEmailAccounts
                 )
             } else {
-                searchResults = try backendAPI.searchDatabase(
+                searchResults = try backendAPI!.searchDatabase(
                     searchTerm: searchText,
                     email: sidebarSelection?.email ?? SidebarConstants.allEmailAccounts
                 )
                 previousSearchText = searchText
             }
         } catch {
-            activeError = DatabaseError(title: "Database Search Error", message: error.localizedDescription)
+            activeAlert = .error(title: "Database Search Error", message: error.localizedDescription)
+            return
         }
     }
 }

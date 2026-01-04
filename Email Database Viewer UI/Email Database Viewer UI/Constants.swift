@@ -13,10 +13,18 @@ enum Status {
     case loaded
 }
 
-struct DatabaseError: Identifiable {
-    let id = UUID()
-    let title: String
-    let message: String
+enum AlertInfo: Identifiable, Hashable {
+    case error(title: String, message: String)
+    case fatalError(errorType: String, message: String)
+    case requireMigration(details: String)
+    
+    var id: String {
+        switch self {
+        case .error: return "error"
+        case .fatalError: return "fatalError"
+        case .requireMigration: return "requireMigration"
+        }
+    }
 }
 
 protocol sidebarItem: Hashable, Identifiable {

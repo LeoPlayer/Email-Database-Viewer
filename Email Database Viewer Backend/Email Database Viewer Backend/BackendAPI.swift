@@ -9,9 +9,18 @@ import Foundation
 import SharedConstants
 
 public class BackendAPI {
-    private let databaseService = DatabaseService.instance
+    private let databaseService: DatabaseService
     
-    public init() { }
+    public init() throws {
+        let initResult = DatabaseService.getInitResult
+        switch initResult {
+        case .success(let service):
+            self.databaseService = service
+        case .failure(let error):
+            // always fatal
+            throw BackendError.databaseInitialisationFailed(error.localizedDescription)
+        }
+    }
     
     let dateFormatterSydney: DateFormatter = {
         let formatter = DateFormatter()
@@ -29,8 +38,19 @@ public class BackendAPI {
         return formatter
     }()
     
+    public func requiresMigration() throws -> Bool {
+        return try databaseService.requiresMigration()
+    }
+    
+    public func applyMigration() throws {
+        return try databaseService.applyMigration()
+    }
+    
+    public func getAllEmails() throws -> [String] {
+        return try databaseService.getAllEmails()
+    }
+    
     public func populate() async throws {
-        try await databaseService.createTable()
         try await databaseService.insertItems(
             [
                 EmailItem(id: "1", senderName: "James", senderAddress: "james.ebb@hotmail.com", receiverName: "Leo", receiverAddress: "leo1@gmail.com", emailTitle: "Meeting", emailContent: "Hi Leo.\nJust writing to let you know that there is a general meeting this Thursday at 2pm. We will be discussing about the direction where we're going with the project, and everyone's opinions on it.\n\nSee you there,\nJames", emailDate: dateFormatterSydney.date(from: "2015/07/12 10:11:23")!),
