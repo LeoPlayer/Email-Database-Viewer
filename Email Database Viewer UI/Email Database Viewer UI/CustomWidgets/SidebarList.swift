@@ -57,15 +57,6 @@ private struct IconAndText: View {
     }
 }
 
-//// temporary data
-//private var allAccountArray: [accountItem] {
-//    return [
-//        accountItem(email: SidebarConstants.allEmailAccounts, systemIcon: "tray.2.fill"),
-//        accountItem(email: "leo1@gmail.com", systemIcon: "person.crop.circle.fill"),
-//        accountItem(email: "leo2@outlook.com", systemIcon: "person.crop.circle.fill")
-//    ]
-//}
-
 private var allInboxTypes: [InboxNames] = [
     .allEmails, .inbox, .sent, .flagged, .draft, .deleted
 ]
